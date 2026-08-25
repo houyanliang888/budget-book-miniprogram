@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>激活码生成器 · 装修记账本</title>
+<style>
+  :root{--navy:#1f3a5f;--navy-d:#16293f;--orange:#ff7a1a;--bg:#eef1f5;--card:#fff;--text:#23282f;--muted:#8a93a2;--line:#eef1f5;--green:#15b86b;--red:#f0463f;--shadow:0 6px 20px rgba(31,58,95,.08)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);padding:18px;max-width:560px;margin:0 auto;line-height:1.6}
+  .bar{background:linear-gradient(135deg,var(--navy),var(--navy-d));color:#fff;padding:16px 18px;border-radius:16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+  .bar .logo{width:30px;height:30px;border-radius:9px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+  .bar h1{font-size:16px}
+  .bar .s{font-size:11.5px;opacity:.85}
+  .card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:13px;box-shadow:var(--shadow)}
+  .card-t{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+  .card-t .dot{width:7px;height:16px;border-radius:4px;background:var(--orange)}
+  label{display:block;font-size:12.5px;color:var(--muted);margin:10px 0 5px;font-weight:600}
+  input,select{width:100%;border:1px solid #e3e8ef;background:#fff;border-radius:11px;padding:11px 12px;font-size:14px;color:var(--navy);font-weight:600}
+  input:focus{outline:2px solid var(--orange);outline-offset:-1px}
+  .row{display:flex;gap:10px}
+  .row>div{flex:1}
+  .btn-primary{width:100%;border:0;background:linear-gradient(135deg,var(--orange),#ff9d2e);color:#fff;font-size:15px;font-weight:800;padding:13px;border-radius:13px;cursor:pointer;margin-top:8px;box-shadow:0 6px 16px rgba(255,122,26,.3)}
+  .btn-ghost{width:100%;border:1px solid #e3e8ef;background:#fff;color:var(--navy);font-size:14px;font-weight:700;padding:12px;border-radius:13px;cursor:pointer;margin-top:8px}
+  .btn-primary:active,.btn-ghost:active{transform:scale(.98)}
+  textarea{width:100%;height:180px;border:1px solid #e3e8ef;border-radius:11px;padding:11px;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--navy);resize:vertical}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .note{font-size:11.5px;color:var(--muted);line-height:1.7;margin-top:8px}
+  .warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11.5px;padding:10px 12px;border-radius:11px;line-height:1.6;margin-top:10px}
+  .ok{color:var(--green);font-weight:700}
+  .bad{color:var(--red);font-weight:700}
+  .stat{font-size:12px;color:var(--muted);margin-top:8px}
+  code{background:var(--line);padding:1px 5px;border-radius:5px;font-size:11.5px;color:var(--navy)}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="logo">装</div>
+  <div><h1>激活码生成器</h1><div class="s">装修记账本 · 9.9 元售卖配套</div></div>
+</div>
+
+<div class="card">
+  <div class="card-t"><span class="dot"></span>批量生成激活码</div>
+  <div class="row">
+    <div><label>生成数量</label><input type="number" id="qty" value="20" min="1" max="2000"></div>
+    <div><label>批次备注（仅标注）</label><input type="text" id="tag" placeholder="如：首批-抖音"></div>
+  </div>
+  <button class="btn-primary" id="genBtn">生成激活码</button>
+  <div class="stat" id="genStat"></div>
+  <div class="warn">
+    ⚠️ 这是<strong>纯前端本地校验</strong>：激活码按固定算法生成，用户若在 App 的 JS 里找到算法就能自己造码。对 9.9 元小工具够用；若要真正防破解，请填 App 里的 <code>LIC_URL</code> 接一个后端做在线核验/可作废。<br>
+    生成的码请妥善发给付费用户，<strong>不要公开整批列表</strong>。
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-t"><span class="dot"></span>导出</div>
+  <textarea id="out" readonly placeholder="点上方「生成激活码」后，这里会出现一批码"></textarea>
+  <div class="grid">
+    <button class="btn-ghost" id="copyBtn">📋 复制全部</button>
+    <button class="btn-ghost" id="downBtn">⬇️ 下载 .txt</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-t"><span class="dot"></span>自测校验</div>
+  <label>输入一个激活码，验证算法是否匹配 App</label>
+  <input type="text" id="testIn" placeholder="ZJ-XXXX-XXXX-XXXX" style="text-transform:uppercase">
+  <button class="btn-ghost" id="testBtn">校验</button>
+  <div class="stat" id="testStat"></div>
+</div>
+
+<script>
+/* ⚠️ 必须与 装修记账本/index.html 里的 SALT 完全一致 */
+const SALT='HOUGE-ZJ-LEDGER-9D9-2026';
+const ALPH='0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+const bNenc=(n,len)=>{n=n>>>0;let s='';for(let i=0;i<len;i++){s=ALPH[n%32]+s;n=Math.floor(n/32);}return s;};
+const rand4=()=>{let s='';for(let i=0;i<4;i++)s+=ALPH[Math.floor(Math.random()*32)];return s;};
+function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h>>>0;}
+function makeCode(){const g1=rand4(),g2=rand4();const ck=bNenc(hashStr(g1+g2+SALT),4);return 'ZJ-'+g1+'-'+g2+'-'+ck;}
+
+const G=id=>document.getElementById(id);
+G('genBtn').onclick=()=>{
+  let n=parseInt(G('qty').value,10);if(!n||n<1)n=1;if(n>2000)n=2000;
+  const tag=(G('tag').value.trim()||'')+' ';
+  const lines=[];for(let i=0;i<n;i++)lines.push((i+1)+'.\t'+tag+makeCode());
+  G('out').value=lines.join('\n');
+  G('genStat').textContent='已生成 '+n+' 个激活码（格式 ZJ-XXXX-XXXX-XXXX）';
+};
+G('copyBtn').onclick=()=>{const t=G('out').value;if(!t){return}navigator.clipboard?.writeText(t).then(()=>G('genStat').textContent='已复制到剪贴板').catch(()=>{G('out').select();document.execCommand('copy');G('genStat').textContent='已复制';});};
+G('downBtn').onclick=()=>{const t=G('out').value;if(!t)return;const b=new Blob([t],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='装修记账本_激活码_'+new Date().toISOString().slice(0,10)+'.txt';a.click();};
+G('testBtn').onclick=()=>{
+  const c=(G('testIn').value||'').toUpperCase().replace(/\s+/g,'').replace(/I/g,'1').replace(/L/g,'1').replace(/O/g,'0');
+  const GRP='['+ALPH+']';const RE=new RegExp('^ZJ-('+GRP+'{4})-('+GRP+'{4})-('+GRP+'{4})$');
+  const m=RE.exec(c);
+  if(!m){G('testStat').innerHTML='<span class="bad">格式不对</span>';return;}
+  const ok=bNenc(hashStr(m[1]+m[2]+SALT),4)===m[3];
+  G('testStat').innerHTML=ok?'<span class="ok">✓ 有效激活码（App 可解锁）</span>':'<span class="bad">✗ 校验位不匹配（无效）</span>';
+};
+</script>
+</body>
+</html>

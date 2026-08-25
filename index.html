@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#1f3a5f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="装修记账">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="装修记账">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>装修记账本 · 家装每一笔都清楚</title>
+<style>
+  :root{
+    --navy:#1f3a5f; --navy-d:#16293f; --orange:#ff7a1a; --orange-d:#e96a08;
+    --bg:#eef1f5; --card:#ffffff; --text:#23282f; --muted:#8a93a2;
+    --line:#eef1f5; --green:#15b86b; --red:#f0463f; --soft:#f6f8fb;
+    --shadow:0 6px 20px rgba(31,58,95,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#dfe4ea; color:var(--text); font-size:14px; line-height:1.5;
+    display:flex; justify-content:center;
+  }
+  .app{width:100%;max-width:430px;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;position:relative;box-shadow:0 0 40px rgba(0,0,0,.12)}
+  @media(min-width:480px){body{padding:18px 0}.app{min-height:calc(100vh - 36px);border-radius:26px;overflow:hidden}}
+
+  .appbar{background:linear-gradient(135deg,var(--navy),var(--navy-d));color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+  .appbar .title{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .appbar .logo{width:28px;height:28px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff}
+  .appbar .mini{font-size:12px;opacity:.85}
+
+  .screen{flex:1;overflow-y:auto;padding:14px;display:none}
+  .screen.active{display:block}
+  .screen::-webkit-scrollbar{width:0}
+
+  .card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:13px;box-shadow:var(--shadow)}
+  .card-t{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+  .card-t .dot{width:7px;height:16px;border-radius:4px;background:var(--orange)}
+
+  .housebar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .housebar select{flex:1;border:0;background:#fff;border-radius:12px;padding:11px 12px;font-size:14px;font-weight:700;color:var(--navy);box-shadow:var(--shadow);appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><path d='M2 4l4 4 4-4' stroke='%231f3a5f' stroke-width='1.6' fill='none'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
+  .housebar .add{width:42px;height:42px;border:0;background:var(--orange);color:#fff;border-radius:12px;font-size:22px;font-weight:800;flex-shrink:0;box-shadow:0 5px 14px rgba(255,122,26,.3)}
+
+  .hero{background:linear-gradient(135deg,var(--navy),var(--navy-d));color:#fff;border-radius:18px;padding:18px;margin-bottom:13px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .hero .deco{position:absolute;right:-8px;top:-14px;font-size:70px;opacity:.12;transform:rotate(14deg)}
+  .hero .hl{font-size:12px;opacity:.82;display:flex;align-items:center;gap:6px}
+  .hero .spent{font-size:30px;font-weight:800;margin:4px 0 2px;letter-spacing:.5px}
+  .hero .sub{font-size:12px;opacity:.85}
+  .hero .pbar{height:8px;background:rgba(255,255,255,.18);border-radius:6px;margin-top:12px;overflow:hidden}
+  .hero .pbar i{display:block;height:100%;background:linear-gradient(90deg,#ffd884,#ff7a1a);border-radius:6px;transition:width .3s}
+  .hero .row{display:flex;gap:10px;margin-top:12px}
+  .hero .pill{flex:1;background:rgba(255,255,255,.12);border-radius:12px;padding:9px 10px}
+  .hero .pill .k{font-size:11px;opacity:.85}
+  .hero .pill .v{font-size:15px;font-weight:700;margin-top:2px}
+
+  .seg{display:inline-flex;background:var(--soft);border-radius:11px;padding:4px;gap:4px;width:100%}
+  .seg button{flex:1;border:0;background:transparent;padding:9px 0;border-radius:8px;font-weight:700;color:var(--muted);cursor:pointer}
+  .seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+  .field{margin-bottom:14px}
+  .field>label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px;font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid #e3e8ef;background:#fff;color:#515b68;border-radius:13px;padding:9px 13px;font-size:13px;cursor:pointer;transition:.14s;display:inline-flex;align-items:center;gap:5px}
+  .chip:active{transform:scale(.93)}
+  .chip-ic{font-size:15px;line-height:1}
+  .chip.on{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:700;box-shadow:0 5px 14px rgba(31,58,95,.25);transform:translateY(-1px)}
+  .chip-grp{font-size:12px;color:var(--orange);font-weight:700;margin:13px 0 8px;width:100%;flex-basis:100%;display:flex;align-items:center;gap:6px}
+
+  .amount-in{width:100%;border:0;border-bottom:2px solid var(--line);background:transparent;font-size:34px;font-weight:800;color:var(--navy);padding:6px 2px;text-align:right}
+  .amount-in:focus{outline:0;border-bottom-color:var(--orange)}
+  .row2{display:flex;gap:10px}
+  .row2 .field{flex:1}
+  input[type=date],input[type=text],input[type=number]{width:100%;border:1px solid #e3e8ef;border-radius:10px;padding:10px;font-size:14px;background:#fff;color:var(--text)}
+  input:focus{outline:2px solid var(--orange);outline-offset:-1px}
+  .btn-primary{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px;box-shadow:0 6px 16px rgba(255,122,26,.32)}
+  .btn-primary:active{transform:translateY(1px)}
+  .btn-ghost{width:100%;background:#fff;color:var(--navy);border:1px solid #e3e8ef;border-radius:13px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+
+  .photo-btn{display:flex;align-items:center;gap:10px;border:1px dashed #cfd6e0;background:var(--soft);border-radius:12px;padding:11px 13px;cursor:pointer;color:var(--muted);font-size:13px;margin-top:4px}
+  .photo-btn .pv{width:46px;height:46px;border-radius:9px;object-fit:cover;flex-shrink:0;border:1px solid #e3e8ef}
+  .keep{display:flex;align-items:center;gap:7px;margin-top:12px;font-size:12px;color:var(--muted);cursor:pointer}
+  .keep input{width:15px;height:15px;accent-color:var(--orange)}
+
+  .ptabs{display:flex;background:var(--soft);border-radius:11px;padding:4px;gap:4px;margin-bottom:12px}
+  .ptabs button{flex:1;border:0;background:transparent;padding:8px 0;border-radius:8px;font-weight:700;color:var(--muted);cursor:pointer;font-size:12.5px}
+  .ptabs button.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.07)}
+
+  .searchbar{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e3e8ef;border-radius:13px;padding:9px 12px;margin-bottom:13px;box-shadow:var(--shadow)}
+  .searchbar .si{font-size:15px;opacity:.6}
+  .searchbar input{flex:1;border:0;outline:0;font-size:14px;background:transparent;color:var(--text)}
+  .searchbar .sclear{border:0;background:#eef1f5;color:var(--muted);width:22px;height:22px;border-radius:50%;font-size:12px;cursor:pointer;flex-shrink:0}
+
+  .filter{display:flex;gap:8px;margin-bottom:12px}
+  .filter select{flex:1;border:1px solid #e3e8ef;background:#fff;border-radius:11px;padding:9px 10px;font-size:13px;color:var(--navy);font-weight:600;appearance:none}
+
+  .daygrp{margin-bottom:13px}
+  .dayhdr{display:flex;justify-content:space-between;align-items:baseline;padding:4px 6px 8px;font-size:12px;color:var(--muted)}
+  .dayhdr .dnum{font-size:15px;font-weight:800;color:var(--navy)}
+  .dayhdr .dsum{font-weight:700}
+  .item{display:flex;align-items:center;gap:11px;background:#fff;border-radius:13px;padding:11px 13px;margin-bottom:7px;box-shadow:0 2px 8px rgba(31,58,95,.05)}
+  .item .ico{width:38px;height:38px;border-radius:11px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .item .mid{flex:1;min-width:0}
+  .item .nm{font-weight:600}
+  .item .nt{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .item .amt{font-weight:800;font-size:15px;white-space:nowrap}
+  .amt-out{color:var(--text)}
+  .amt-ref{color:var(--green)}
+  .item .thumb{width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid #e3e8ef;cursor:pointer}
+  .item .del{color:#c3cad4;font-size:12px;padding:4px 6px;cursor:pointer;flex-shrink:0}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:10px;font-size:12px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:5px}
+  .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+  .pbar-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+  .pbar-row .nm{width:74px;font-size:13px;font-weight:600;flex-shrink:0}
+  .pbar-row .bk{flex:1;height:14px;background:var(--soft);border-radius:8px;overflow:hidden;position:relative}
+  .pbar-row .bk i{position:absolute;left:0;top:0;height:100%;background:var(--navy);border-radius:8px;transition:width .3s}
+  .pbar-row .bk i.over{background:var(--red)}
+  .pbar-row .vv{width:88px;text-align:right;font-size:12px;color:var(--muted);flex-shrink:0}
+  .pbar-row .vv b{color:var(--text)}
+
+  .brow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .brow:last-child{border-bottom:0}
+  .brow .ic{width:30px;height:30px;border-radius:9px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .brow .info{flex:1;min-width:0}
+  .brow .info .t{font-weight:600;font-size:13.5px}
+  .brow .info .s{font-size:11.5px;color:var(--muted)}
+  .brow .info .bar{height:7px;background:var(--soft);border-radius:5px;margin-top:5px;overflow:hidden}
+  .brow .info .bar i{display:block;height:100%;background:var(--navy);border-radius:5px}
+  .brow .info .bar i.over{background:var(--red)}
+  .brow .amt{font-weight:800;font-size:14px;flex-shrink:0;text-align:right}
+  .brow .amt.over{color:var(--red)}
+  .brow .bud{width:84px;border:1px solid #e3e8ef;border-radius:8px;padding:6px;font-size:12px;text-align:right}
+  .brow .bud:focus{outline:2px solid var(--orange);outline-offset:-1px}
+
+  .menu{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:13px}
+  .menu .mi{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer}
+  .menu .mi:last-child{border-bottom:0}
+  .menu .mi .ic{width:34px;height:34px;border-radius:10px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:17px}
+  .menu .mi .tx{flex:1}
+  .menu .mi .tx .t{font-weight:600}
+  .menu .mi .tx .s{font-size:12px;color:var(--muted)}
+  .menu .mi .ar{color:#c3cad4}
+
+  .about{font-size:12px;color:var(--muted);text-align:center;line-height:1.7;padding:6px 0 4px}
+  .about b{color:var(--navy)}
+
+  .tabbar{flex-shrink:0;display:flex;background:#fff;border-top:1px solid #eef1f5;padding:6px 0 calc(6px + env(safe-area-inset-bottom))}
+  .tabbar button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--muted);font-size:11px;padding:4px 0;transition:.12s}
+  .tabbar button:active{transform:scale(.88)}
+  .tabbar button .ti{font-size:20px;line-height:1}
+  .tabbar button.on{color:var(--orange);font-weight:700}
+
+  .empty{text-align:center;color:var(--muted);padding:38px 20px;font-size:13px}
+  .empty .big{font-size:34px;margin-bottom:10px}
+  .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 20px;border-radius:22px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:50;max-width:80%;text-align:center}
+  .toast.show{opacity:1}
+  .hidden{display:none}
+  .note{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px}
+  code{background:var(--soft);padding:1px 5px;border-radius:5px;font-size:11.5px;color:var(--navy)}
+
+  .trialbar{background:linear-gradient(90deg,#ff7a1a,#ff9d2e);color:#fff;font-size:12.5px;padding:9px 14px;display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0}
+  .trialbar b{text-decoration:underline}
+  .trialbar .cnt{font-weight:800}
+  .trialbar.hidden{display:none}
+
+  .modal{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center}
+  .modal.hidden{display:none}
+  .modal .mask{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+  .modal .sheet{position:relative;width:100%;max-width:430px;background:#fff;border-radius:18px 18px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(0,0,0,.2);animation:rise .22s ease}
+  @keyframes rise{from{transform:translateY(40px);opacity:.6}to{transform:translateY(0);opacity:1}}
+  .sheet-h{font-size:18px;font-weight:800;color:var(--navy);text-align:center}
+  .sheet-sub{font-size:12.5px;color:var(--muted);text-align:center;margin:6px 0 14px;line-height:1.6}
+  .act-in{width:100%;border:1px solid #d7dde6;border-radius:12px;padding:13px 14px;font-size:16px;letter-spacing:1px;text-align:center;font-weight:700;color:var(--navy);margin-bottom:12px}
+  .act-in:focus{outline:2px solid var(--orange);outline-offset:-1px}
+  .act-hint{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.7;margin:12px 0}
+  .act-hint a{color:var(--orange);font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="appbar">
+    <div class="title"><span class="logo">装</span> 装修记账本</div>
+      <div class="mini" id="appMini">离线可用</div>
+    </div>
+    <div class="trialbar hidden" id="trialBar" onclick="openAct()">
+      🧪 试用版 · 已记 <span class="cnt">0/30</span> 笔 · <b>9.9元激活</b> 解锁无限记录 + 导出 ›
+    </div>
+
+  <!-- 记账 -->
+  <div class="screen active" id="sc-record">
+    <div class="housebar">
+      <select class="houseSel" id="sel-record"></select>
+      <button class="add" id="addHouse1" title="新建装修方案">+</button>
+    </div>
+    <div class="hero">
+      <span class="deco">🏠</span>
+      <div class="hl">📍 <span id="heroName">我的新家</span> · 已支出 / 预算</div>
+      <div class="spent" id="heroSpent">¥0</div>
+      <div class="pbar"><i id="heroBar" style="width:0%"></i></div>
+      <div class="row">
+        <div class="pill"><div class="k">预算总额</div><div class="v" id="heroBudget">¥0</div></div>
+        <div class="pill"><div class="k">剩余 / 超支</div><div class="v" id="heroLeft">¥0</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-t"><span class="dot"></span>记一笔</div>
+      <div class="seg" id="typeSeg">
+        <button data-type="exp" class="on">支出</button>
+        <button data-type="ref">退款 / 返现</button>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>选择分类（按装修阶段）</label>
+        <div class="chips" id="catChips"></div>
+      </div>
+      <div class="field">
+        <label>金额（元）</label>
+        <input class="amount-in" id="fAmt" type="number" inputmode="decimal" placeholder="0.00" step="0.01" min="0">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>日期</label>
+          <input type="date" id="fDate">
+        </div>
+        <div class="field">
+          <label>支付方式</label>
+          <input type="text" id="fPay" placeholder="微信" readonly style="cursor:pointer">
+        </div>
+      </div>
+      <div class="field">
+        <label>项目 / 商品名</label>
+        <input type="text" id="fItem" placeholder="如：马可波罗地砖 800×800">
+      </div>
+      <div class="field">
+        <label>品牌 / 商家</label>
+        <input type="text" id="fMer" placeholder="如：居然之家 / 张三建材店">
+      </div>
+      <div class="field">
+        <label>备注</label>
+        <input type="text" id="fNote" placeholder="选填，如：主卧 30㎡">
+      </div>
+      <div class="field">
+        <label>票据 / 照片（选填）</label>
+        <div class="photo-btn" id="photoBtn">
+          <img class="pv hidden" id="photoPrev" alt="">
+          <span id="photoTxt">📷 拍张发票 / 合同留底</span>
+        </div>
+        <input type="file" id="photoInput" accept="image/*" class="hidden">
+      </div>
+      <button class="btn-primary" id="btnAdd">记 一 笔</button>
+      <label class="keep"><input type="checkbox" id="keepAdd"> 连续记账（记完停留本页，光标回到金额）</label>
+    </div>
+  </div>
+
+  <!-- 预算 -->
+  <div class="screen" id="sc-budget">
+    <div class="housebar">
+      <select class="houseSel" id="sel-budget"></select>
+      <button class="add" id="addHouse2" title="新建装修方案">+</button>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot"></span>预算总控</div>
+      <div class="field" style="margin-bottom:8px">
+        <label>这套房子的装修总预算（元）</label>
+        <input type="number" id="fBudget" inputmode="decimal" placeholder="如：200000" min="0">
+      </div>
+      <button class="btn-ghost" id="btnSplit" style="margin-bottom:6px">⚡ 按总预算智能分摊各分类预算</button>
+      <div id="budgetOverview"></div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot"></span>分类预算（点右侧填预算）</div>
+      <div id="catBudgetList"></div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot"></span>各阶段已花</div>
+      <div id="stageBars"></div>
+    </div>
+  </div>
+
+  <!-- 明细 -->
+  <div class="screen" id="sc-list">
+    <div class="housebar">
+      <select class="houseSel" id="sel-list"></select>
+      <button class="add" id="addHouse3" title="新建装修方案">+</button>
+    </div>
+    <div class="filter">
+      <select id="fStage"><option value="all">全部阶段</option></select>
+      <select id="fCat"><option value="all">全部分类</option></select>
+    </div>
+    <div class="searchbar">
+      <span class="si">🔍</span>
+      <input type="text" id="listSearch" placeholder="搜项目、商家或备注">
+      <button class="sclear" id="listClear" style="display:none">✕</button>
+    </div>
+    <div id="listView"></div>
+    <button class="btn-ghost" id="btnExport" style="margin-top:4px">📤 导出 Excel（CSV）</button>
+  </div>
+
+  <!-- 统计 -->
+  <div class="screen" id="sc-stats">
+    <div class="housebar">
+      <select class="houseSel" id="sel-stats"></select>
+      <button class="add" id="addHouse4" title="新建装修方案">+</button>
+    </div>
+    <div id="statsView"></div>
+  </div>
+
+  <!-- 我的 -->
+  <div class="screen" id="sc-mine">
+    <div class="card">
+      <div class="card-t"><span class="dot"></span>装修方案</div>
+      <div id="houseList"></div>
+      <button class="btn-ghost" id="btnNewHouse" style="margin-top:6px">＋ 新建一套装修方案</button>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot"></span>版本</div>
+      <div class="menu">
+        <div class="mi" id="mActivate"><div class="ic">🔒</div><div class="tx"><div class="t" id="vipT">试用版</div><div class="s" id="vipS">9.9元激活解锁完整版</div></div><div class="ar">›</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot"></span>数据与备份</div>
+      <div class="menu">
+        <div class="mi" id="mSample"><div class="ic">🎲</div><div class="tx"><div class="t">载入示例数据</div><div class="s">灌一笔真实装修账，先看效果</div></div><div class="ar">›</div></div>
+        <div class="mi" id="mExport"><div class="ic">📤</div><div class="tx"><div class="t">导出 Excel（CSV）</div><div class="s">表格可打印、可发给家人核对</div></div><div class="ar">›</div></div>
+        <div class="mi" id="mBackup"><div class="ic">💾</div><div class="tx"><div class="t">备份到文件（JSON）</div><div class="s">换手机前先备份，可再导入</div></div><div class="ar">›</div></div>
+        <div class="mi" id="mImport"><div class="ic">📥</div><div class="tx"><div class="t">从备份恢复</div><div class="s">导入之前导出的 JSON</div></div><div class="ar">›</div></div>
+        <div class="mi" id="mClear"><div class="ic">🗑️</div><div class="tx"><div class="t">清空当前方案数据</div><div class="s">建议先备份！</div></div><div class="ar">›</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot"></span>装到手机桌面</div>
+      <div class="about" style="text-align:left">
+        📱 用手机浏览器打开本页面网址 👉 <code id="liveUrl">…</code><br>
+        <span class="muted">微信里打开请先点右上角 ⋯ →「在浏览器打开」，再继续。</span><br><br>
+        <b>🍎 iPhone / iPad</b>：Safari 打开 → 底部「分享」⬆️ →「添加到主屏幕」<br>
+        <b>🌟 华为鸿蒙</b>：自带浏览器打开 → 右上角 ⋮ →「添加到桌面」<br>
+        <b>🤖 安卓</b>：Chrome 打开 → 右上角 ⋮（或地址栏「安装」图标）→「安装应用」<br>
+        装好后离线也能记账，数据只存在你这台设备。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot"></span>关于 / 售卖说明</div>
+      <div class="about" style="text-align:left">
+        <b>装修记账本</b> · 家装装修专属记账小程序<br>
+        数据全程保存在你本机浏览器（localStorage），不上传任何服务器，隐私安全。<br><br>
+        <b>给卖家的说明：</b>本程序是纯前端 PWA，把整个文件夹传到任意静态空间（自己的服务器 / 对象存储 / 云开发）即可访问，用户装到桌面就是独立 App。可搭配「激活码 / 私发卡」体系做 9.9 元单次售卖；照片会占用本地空间，建议引导用户适度使用并定期导出备份。<br><br>
+        —— 装修花钱容易糊涂，记清楚每一笔，钱才花得明白。
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabbar">
+    <button data-screen="record" class="on"><span class="ti">✍️</span>记账</button>
+    <button data-screen="budget"><span class="ti">🎯</span>预算</button>
+    <button data-screen="list"><span class="ti">📒</span>明细</button>
+    <button data-screen="stats"><span class="ti">📊</span>统计</button>
+    <button data-screen="mine"><span class="ti">👤</span>我的</button>
+  </nav>
+  <input type="file" id="fileInput" accept="application/json" class="hidden">
+</div>
+<div class="modal hidden" id="actModal">
+  <div class="mask" onclick="closeAct()"></div>
+  <div class="sheet">
+    <div class="sheet-h">激活完整版</div>
+    <div class="sheet-sub">输入 9.9 元购买的激活码，永久解锁本机全部功能（不限记录数 + 可导出 Excel）</div>
+    <input class="act-in" id="actCode" placeholder="如：ZJ-7K3P-9F2Q-MX8Z" autocapitalize="characters" spellcheck="false" inputmode="text">
+    <button class="btn-primary" id="actBtn">验证并激活</button>
+    <div class="act-hint">还没激活码？联系卖家微信 / 私发卡购买，付款后获取激活码。<br>激活仅绑定当前设备，重装 App 或清缓存需再次激活。</div>
+    <button class="btn-ghost" onclick="closeAct()">稍后再说</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ 配置 ============ */
+const STORE='zhuangjia_ledger_v1';
+const STAGES=['前期准备','拆改工程','水电改造','泥瓦工程','木工工程','油漆工程','主材安装','软装进场','家电购置','其他'];
+const CATS=[
+  {n:'设计费',s:'前期准备',ic:'📐'},{n:'验房量房',s:'前期准备',ic:'📏'},{n:'物业管理费',s:'前期准备',ic:'🏢'},
+  {n:'拆改人工',s:'拆改工程',ic:'🔨'},{n:'垃圾清运',s:'拆改工程',ic:'🗑️'},
+  {n:'水电材料',s:'水电改造',ic:'🔧'},{n:'水电人工',s:'水电改造',ic:'💡'},{n:'防水工程',s:'水电改造',ic:'💧'},
+  {n:'瓷砖地砖',s:'泥瓦工程',ic:'🧱'},{n:'泥瓦人工',s:'泥瓦工程',ic:'👷'},{n:'地板',s:'泥瓦工程',ic:'🪵'},
+  {n:'卫浴洁具',s:'主材安装',ic:'🚿'},{n:'橱柜',s:'主材安装',ic:'🗄️'},{n:'室内门',s:'主材安装',ic:'🚪'},
+  {n:'封窗窗户',s:'主材安装',ic:'🪟'},{n:'吊顶',s:'主材安装',ic:'🔲'},{n:'烟机灶具',s:'主材安装',ic:'🍳'},
+  {n:'木工人工',s:'木工工程',ic:'🪚'},{n:'定制柜体',s:'木工工程',ic:'🚪'},
+  {n:'油漆涂料',s:'油漆工程',ic:'🎨'},{n:'油漆人工',s:'油漆工程',ic:'🖌️'},
+  {n:'灯具照明',s:'软装进场',ic:'💡'},{n:'窗帘布艺',s:'软装进场',ic:'🪟'},{n:'家具',s:'软装进场',ic:'🛋️'},
+  {n:'床垫寝具',s:'软装进场',ic:'🛏️'},{n:'智能家居',s:'软装进场',ic:'🤖'},
+  {n:'空调',s:'家电购置',ic:'❄️'},{n:'冰箱',s:'家电购置',ic:'🧊'},{n:'洗衣机',s:'家电购置',ic:'🌀'},
+  {n:'电视',s:'家电购置',ic:'📺'},{n:'热水器',s:'家电购置',ic:'🚿'},
+  {n:'监理管理费',s:'其他',ic:'📋'},{n:'开荒保洁',s:'其他',ic:'🧹'},{n:'其他杂项',s:'其他',ic:'📦'}
+];
+const PAYS=['微信','支付宝','银行卡','现金','装修贷','信用卡','花呗','其他'];
+const WEIGHTS={'设计费':3,'验房量房':0.5,'物业管理费':1,'拆改人工':4,'垃圾清运':1,'水电材料':6,'水电人工':4,'防水工程':2,'瓷砖地砖':10,'泥瓦人工':4,'地板':6,'卫浴洁具':6,'橱柜':6,'室内门':3,'封窗窗户':5,'吊顶':2,'烟机灶具':2,'木工人工':3,'定制柜体':5,'油漆涂料':3,'油漆人工':3,'灯具照明':2,'窗帘布艺':2,'家具':8,'床垫寝具':3,'智能家居':3,'空调':3,'冰箱':2,'洗衣机':1.5,'电视':2,'热水器':1.5,'监理管理费':1.5,'开荒保洁':0.5,'其他杂项':1.5};
+const PALETTE=['#1f3a5f','#ff7a1a','#15b86b','#3aa0ff','#f4b400','#9b6bff','#ff5fa2','#19c2c2','#f0463f','#84cc16','#d97706','#5b8def'];
+const CAT_IC={};CATS.forEach(c=>CAT_IC[c.n]=c.ic);
+const CAT_ST={};CATS.forEach(c=>CAT_ST[c.n]=c.s);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const G=id=>document.getElementById(id);
+
+/* ============ 状态 ============ */
+let db=load();
+let ui={screen:'record',rtype:'exp',rcat:CATS[0].n,rpay:'微信',rphoto:null,q:'',fstage:'all',fcat:'all'};
+
+function load(){try{const d=JSON.parse(localStorage.getItem(STORE));if(d&&d.houses)return d}catch(e){}
+  return {houses:[{id:uid(),name:'我的新家',budget:0,catBudgets:{}}],tx:[]};}
+function save(){localStorage.setItem(STORE,JSON.stringify(db));checkSize();}
+function curHouse(){return db.houses.find(h=>h.id===db.cur)||db.houses[0];}
+function txOf(hid){return db.tx.filter(t=>t.hid===hid);}
+function netOf(arr){let e=0,r=0;arr.forEach(t=>{if(t.type==='exp')e+=+t.amount;else r+=+t.amount});return{exp:e,ref:r,net:e-r};}
+
+/* ============ 工具 ============ */
+const fmt=n=>'¥'+Number(n).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt0=n=>'¥'+Math.round(n).toLocaleString('zh-CN');
+const pad=n=>(n<10?'0':'')+n;
+const dstr=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parseD=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const WD=['周日','周一','周二','周三','周四','周五','周六'];
+function toast(m){const t=G('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1900);}
+function checkSize(){try{if(JSON.stringify(db).length>4000000&&!checkSize._w){checkSize._w=1;toast('数据较多，照片占用本地空间，建议定期导出备份');}}catch(e){}}
+
+/* ============ 激活码 / 付费解锁 ============ */
+const LIC_KEY='zhuangjia_ledger_lic_v1';
+const TRIAL_CAP=30;
+const SALT='HOUGE-ZJ-LEDGER-9D9-2026';          // ⚠️ 必须与「激活码生成器.html」里的 SALT 完全一致
+const LIC_URL='';                               // 可选：填激活校验接口(返回 {"ok":true} 即放行)；留空=纯本地校验
+const ALPH='0123456789ABCDEFGHJKMNPQRSTVWXYZ';  // Crockford base32（无易混字符 I/L/O/U）
+const GRP='['+ALPH+']';
+const CODE_RE=new RegExp('^ZJ-('+GRP+'{4})-('+GRP+'{4})-('+GRP+'{4})$');
+const bNenc=(n,len)=>{n=n>>>0;let s='';for(let i=0;i<len;i++){s=ALPH[n%32]+s;n=Math.floor(n/32);}return s;};
+const rand4=()=>{let s='';for(let i=0;i<4;i++)s+=ALPH[Math.floor(Math.random()*32)];return s;};
+function normCode(s){return (s||'').toUpperCase().replace(/\s+/g,'').replace(/I/g,'1').replace(/L/g,'1').replace(/O/g,'0');}
+function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h>>>0;}
+function validCode(raw){
+  const c=normCode(raw);
+  const m=CODE_RE.exec(c);if(!m)return false;
+  return bNenc(hashStr(m[1]+m[2]+SALT),4)===m[3];
+}
+function getLic(){try{return JSON.parse(localStorage.getItem(LIC_KEY)||'null')}catch(e){return null}}
+function isUnlocked(){return !!getLic();}
+function activate(raw){
+  if(isUnlocked()){toast('已经是完整版啦');return true;}
+  if(!validCode(raw)){toast('激活码无效，请检查格式或大小写');return false;}
+  const lic={code:normCode(raw),at:Date.now()};
+  try{localStorage.setItem(LIC_KEY,JSON.stringify(lic));}catch(e){}
+  if(LIC_URL){fetch(LIC_URL+'?c='+encodeURIComponent(lic.code)).then(r=>r.json()).then(j=>{if(!j.ok){localStorage.removeItem(LIC_KEY);renderAll();toast('该激活码已被停用');}}).catch(()=>{});}
+  renderAll();toast('🎉 激活成功，已解锁完整版');return true;
+}
+function openAct(){const m=G('actModal');if(m)m.classList.remove('hidden');try{G('actCode').focus()}catch(_){}}
+function closeAct(){const m=G('actModal');if(m)m.classList.add('hidden');}
+function renderTrial(){
+  const bar=G('trialBar');if(!bar)return;
+  if(isUnlocked()){bar.classList.add('hidden');return;}
+  bar.classList.remove('hidden');
+  const c=bar.querySelector('.cnt');if(c)c.textContent=db.tx.length+'/'+TRIAL_CAP;
+}
+function renderVip(){
+  const t=G('vipT'),s=G('vipS'),mi=G('mActivate');if(!t)return;
+  if(isUnlocked()){t.textContent='✅ 完整版（已激活）';s.textContent='无限记录 + 导出 已解锁';if(mi)mi.querySelector('.ic').textContent='🔓';}
+  else{t.textContent='🧪 试用版';s.textContent='已记 '+db.tx.length+'/'+TRIAL_CAP+' 笔 · 激活解锁全部';if(mi)mi.querySelector('.ic').textContent='🔒';}
+}
+
+/* ============ 图表（SVG，离线） ============ */
+function donut(el,items){
+  const cx=120,cy=120,r=84,ir=52,W=240,H=240,total=items.reduce((a,b)=>a+b.value,0)||1;
+  let ang=-Math.PI/2,g='';
+  items.forEach(it=>{const a2=ang+Math.PI*2*(it.value/total);if(it.value>0){const lg=(a2-ang)>Math.PI?1:0;
+    const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang),x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2),
+          xi2=cx+ir*Math.cos(a2),yi2=cy+ir*Math.sin(a2),xi1=cx+ir*Math.cos(ang),yi1=cy+ir*Math.sin(ang);
+    g+=`<path d="M${x1} ${y1} A${r} ${r} 0 ${lg} 1 ${x2} ${y2} L${xi2} ${yi2} A${ir} ${ir} 0 ${lg} 0 ${xi1} ${yi1} Z" fill="${it.color}"><title>${it.label}:${fmt(it.value)}</title></path>`;}
+    ang=a2;});
+  g+=`<text x="120" y="113" text-anchor="middle" font-size="12" fill="#aab2bf">支出合计</text>`+
+     `<text x="120" y="135" text-anchor="middle" font-size="16" font-weight="800" fill="#1f3a5f">${fmt0(total)}</text>`;
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
+}
+function barSVG(el,labels,vals){
+  const W=620,H=240,pl=46,pb=34,pt=14,pr=8,iw=W-pl-pr,ih=H-pt-pb;
+  const max=Math.max(1,...vals)*1.15,n=labels.length,slot=iw/n,bw=Math.min(26,slot*0.6);let g='';
+  for(let i=0;i<=4;i++){const y=pt+ih-ih*i/4,v=max*i/4;
+    g+=`<line x1="${pl}" y1="${y}" x2="${W-pr}" y2="${y}" stroke="#eef1f5"/>`;
+    g+=`<text x="${pl-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#aab2bf">${fmt0(v)}</text>`;}
+  vals.forEach((v,i)=>{const x=pl+slot*i+(slot-bw)/2,h=ih*(v/max),y=pt+ih-h;
+    g+=`<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="3" fill="#ff7a1a"><title>${labels[i]}:${fmt(v)}</title></rect>`;});
+  labels.forEach((lb,i)=>g+=`<text x="${pl+slot*i+slot/2}" y="${H-pb+15}" text-anchor="middle" font-size="10" fill="#aab2bf">${lb}</text>`);
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
+}
+
+/* ============ 渲染：房屋选择 ============ */
+function refreshHouses(){
+  const opts=db.houses.map(h=>`<option value="${h.id}">${h.name}</option>`).join('');
+  document.querySelectorAll('.houseSel').forEach(s=>{s.innerHTML=opts;s.value=curHouse().id;});
+}
+function switchHouse(id){db.cur=id;save();refreshHouses();renderAll();}
+
+/* ============ 渲染：记账页 ============ */
+function renderHero(){
+  const h=curHouse(),tx=txOf(h.id),{exp,net}=netOf(tx);
+  G('heroName').textContent=h.name;
+  G('heroSpent').textContent=fmt(net);
+  G('heroBudget').textContent=h.budget>0?fmt0(h.budget):'未设';
+  const left=h.budget-net;
+  G('heroLeft').textContent=h.budget>0?(left>=0?fmt0(left):'超支 '+fmt0(-left)):'未设预算';
+  G('heroLeft').style.color=h.budget>0&&left<0?'#ff9d2e':'#fff';
+  const pct=h.budget>0?Math.min(100,net/h.budget*100):0;
+  G('heroBar').style.width=pct+'%';
+  renderTrial();
+}
+function renderCats(){
+  const box=G('catChips');let h='';const chip=c=>`<button class="chip ${ui.rcat===c?'on':''}" data-cat="${c}"><span class="chip-ic">${CAT_IC[c]}</span>${c}</button>`;
+  STAGES.forEach(st=>{const cs=CATS.filter(c=>c.s===st);if(cs.length){h+=`<div class="chip-grp">${st}</div>`+cs.map(c=>chip(c.n)).join('');}});
+  box.innerHTML=h;
+  box.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{ui.rcat=b.dataset.cat;renderCats();});
+}
+
+/* ============ 渲染：预算页 ============ */
+function renderBudget(){
+  const h=curHouse(),tx=txOf(h.id),{net}=netOf(tx);
+  G('fBudget').value=h.budget||'';
+  let ov='';
+  if(h.budget>0){
+    const left=h.budget-net,pct=Math.min(100,net/h.budget*100);
+    ov=`<div class="pbar-row"><div class="nm">总进度</div><div class="bk"><i class="${left<0?'over':''}" style="width:${pct}%"></i></div><div class="vv"><b>${pct.toFixed(0)}%</b></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:6px">
+        <span>已支出 <b style="color:var(--navy)">${fmt0(net)}</b></span>
+        <span style="color:${left<0?'var(--red)':'var(--green)'}">${left>=0?'剩余 '+fmt0(left):'超支 '+fmt0(-left)}</span></div>`;
+  }else{
+    ov=`<div class="note">还没设总预算。设好后在上方点「智能分摊」，会自动按装修经验比例给各分类分配预算，超支会标红预警。</div>
+      <div style="margin-top:8px;font-size:13px">已支出 <b style="color:var(--navy)">${fmt0(net)}</b></div>`;
+  }
+  G('budgetOverview').innerHTML=ov;
+  // 分类预算
+  const spent={};tx.forEach(t=>{if(t.type==='exp')spent[t.cat]=(spent[t.cat]||0)+ +t.amount;});
+  const rows=CATS.map(c=>{const s=spent[c.n]||0,b=h.catBudgets[c.n]||0;return{c:s,sp:s,b:b};})
+    .sort((a,b)=>b.sp-a.sp);
+  let html='';
+  rows.forEach(r=>{
+    const cb=h.catBudgets[r.c]||0;
+    const pct=cb>0?Math.min(100,r.sp/cb*100):0;
+    const over=cb>0&&r.sp>cb;
+    html+=`<div class="brow">
+      <div class="ic">${CAT_IC[r.c]}</div>
+      <div class="info">
+        <div class="t">${r.c}</div>
+        <div class="s">${cb>0?('已花 '+fmt0(r.sp)+' / 预算 '+fmt0(cb)):(r.sp>0?('已花 '+fmt0(r.sp)+' · 未设预算'):'未设预算')}</div>
+        <div class="bar"><i class="${over?'over':''}" style="width:${pct}%"></i></div>
+      </div>
+      <div class="amt ${over?'over':''}">${fmt0(r.sp)}</div>
+      <input class="bud" type="number" min="0" data-cat="${r.c}" value="${cb||''}" placeholder="预算">
+    </div>`;
+  });
+  G('catBudgetList').innerHTML=html;
+  G('catBudgetList').querySelectorAll('.bud').forEach(inp=>inp.onchange=()=>{
+    const v=parseFloat(inp.value)||0;const c=inp.dataset.cat;
+    if(v>0)curHouse().catBudgets[c]=v;else delete curHouse().catBudgets[c];
+    save();renderBudget();renderHero();toast('已更新 '+c+' 预算');
+  });
+  // 阶段
+  const ss={};tx.forEach(t=>{if(t.type==='exp')ss[CAT_ST[t.cat]]=(ss[CAT_ST[t.cat]]||0)+ +t.amount;});
+  const entries=STAGES.map(st=>[st,ss[st]||0]).filter(e=>e[1]>0);
+  const max=Math.max(1,...entries.map(e=>e[1]));
+  let sh=entries.length?entries.map(([st,v])=>`<div class="pbar-row"><div class="nm">${st}</div><div class="bk"><i style="width:${v/max*100}%"></i></div><div class="vv"><b>${fmt0(v)}</b></div></div>`).join(''):'<div class="empty">还没有支出记录</div>';
+  G('stageBars').innerHTML=sh;
+}
+
+/* ============ 渲染：明细页 ============ */
+function renderList(){
+  // 填充筛选
+  const fs=G('fStage');if(!fs.dataset.init){fs.innerHTML='<option value="all">全部阶段</option>'+STAGES.map(s=>`<option value="${s}">${s}</option>`).join('');fs.dataset.init=1;}
+  const fc=G('fCat');if(!fc.dataset.init){fc.innerHTML='<option value="all">全部分类</option>'+CATS.map(c=>`<option value="${c.n}">${c.ic} ${c.n}</option>`).join('');fc.dataset.init=1;}
+  let tx=txOf(curHouse().id);
+  if(ui.fstage!=='all')tx=tx.filter(t=>CAT_ST[t.cat]===ui.fstage);
+  if(ui.fcat!=='all')tx=tx.filter(t=>t.cat===ui.fcat);
+  const q=(ui.q||'').trim().toLowerCase();
+  if(q)tx=tx.filter(t=>(t.item||'').toLowerCase().includes(q)||(t.merchant||'').toLowerCase().includes(q)||(t.note||'').toLowerCase().includes(q)||t.cat.toLowerCase().includes(q));
+  if(!tx.length){G('listView').innerHTML='<div class="empty"><div class="big">📭</div>'+(q?'没有匹配的记录':'这个方案还没有记账<br>去「记账」页记第一笔吧')+'</div>';return;}
+  const {exp,ref,net}=netOf(tx);
+  let sum=`<div class="card" style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;font-size:13px">
+    <span style="font-weight:700;color:var(--navy)">支出 ${fmt0(exp)}</span>
+    <span style="font-weight:700;color:var(--green)">退款 ${fmt0(ref)}</span>
+    <span style="font-weight:700">净支出 ${fmt0(net)}</span></div></div>`;
+  const groups={};tx.forEach(t=>(groups[t.date]=groups[t.date]||[]).push(t));
+  const dates=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
+  let html=sum;
+  dates.forEach(d=>{
+    const items=groups[d].sort((a,b)=>b.id.localeCompare(a.id));
+    let de=0,dr=0;items.forEach(t=>{if(t.type==='exp')de+=+t.amount;else dr+=+t.amount});
+    html+=`<div class="daygrp"><div class="dayhdr"><span><span class="dnum">${d.slice(5)}</span> ${WD[parseD(d).getDay()]}</span><span class="dsum">支 ${fmt0(de)} · 退 ${fmt0(dr)}</span></div>`;
+    items.forEach(t=>{
+      const ic=CAT_IC[t.cat]||'💡';
+      html+=`<div class="item">
+        <div class="ico">${ic}</div>
+        <div class="mid"><div class="nm">${t.cat}${t.type==='ref'?' · 退款':''}</div><div class="nt">${[t.item,t.merchant,t.note].filter(Boolean).join(' · ')||'—'}</div></div>
+        ${t.photo?`<img class="thumb" src="${t.photo}" data-photo="${t.photo}">`:''}
+        <div class="amt ${t.type==='ref'?'amt-ref':'amt-out'}">${t.type==='ref'?'−':'−'}${fmt(t.amount).slice(1)}</div>
+        <div class="del" data-del="${t.id}">删</div></div>`;
+    });
+    html+='</div>';
+  });
+  G('listView').innerHTML=html;
+  G('listView').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    if(!confirm('删除这笔记录？'))return;db.tx=db.tx.filter(t=>t.id!==b.dataset.del);save();renderList();renderHero();toast('已删除');});
+  G('listView').querySelectorAll('[data-photo]').forEach(im=>im.onclick=()=>window.open(im.dataset.photo));
+}
+
+/* ============ 渲染：统计页 ============ */
+function renderStats(){
+  const h=curHouse(),tx=txOf(h.id),{exp,net}=netOf(tx);
+  if(!tx.length){G('statsView').innerHTML='<div class="empty"><div class="big">📊</div>这个方案还没有数据<br>去记几笔，再来这里看报表</div>';return;}
+  let head=`<div class="card"><div style="display:flex;justify-content:space-between;font-size:13px">
+    <span style="font-weight:700;color:var(--navy)">预算 ${h.budget>0?fmt0(h.budget):'未设'}</span>
+    <span style="font-weight:700;color:var(--red)">已支出 ${fmt0(net)}</span>
+    <span style="font-weight:700;color:${h.budget>0&&(h.budget-net)<0?'var(--red)':'var(--green)'}">${h.budget>0?(h.budget-net>=0?'剩 '+fmt0(h.budget-net):'超 '+fmt0(net-h.budget)):'—'}</span></div></div>`;
+  // 分类占比
+  const spent={};tx.forEach(t=>{if(t.type==='exp')spent[t.cat]=(spent[t.cat]||0)+ +t.amount;});
+  const items=Object.keys(spent).map(k=>({label:k,value:spent[k],color:PALETTE[0]})).sort((a,b)=>b.value-a.value);
+  items.forEach((it,i)=>it.color=PALETTE[i%PALETTE.length]);
+  let donutCard=`<div class="card"><div class="card-t"><span class="dot"></span>支出分类占比</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <div style="flex:0 0 150px"><div id="sDonut"></div></div>
+    <div class="legend" style="flex:1;flex-direction:column;gap:5px;align-items:flex-start">
+    ${items.map((it,i)=>`<span><i style="background:${PALETTE[i%PALETTE.length]}"></i>${it.label} ${fmt0(it.value)}</span>`).join('')}</div></div></div>`;
+  // 阶段
+  const ss={};tx.forEach(t=>{if(t.type==='exp')ss[CAT_ST[t.cat]]=(ss[CAT_ST[t.cat]]||0)+ +t.amount;});
+  const sEntries=STAGES.map(st=>[st,ss[st]||0]).filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]);
+  const smax=Math.max(1,...sEntries.map(e=>e[1]));
+  let stageCard=`<div class="card"><div class="card-t"><span class="dot"></span>各阶段花费</div>${sEntries.map(([st,v])=>`<div class="pbar-row"><div class="nm">${st}</div><div class="bk"><i style="width:${v/smax*100}%"></i></div><div class="vv"><b>${fmt0(v)}</b></div></div>`).join('')}</div>`;
+  // 预算对比
+  const cb=h.catBudgets;const cmp=CATS.map(c=>({c:spent[c.n]||0,b:cb[c.n]||0})).filter(r=>r.c>0||r.b>0).sort((a,b)=>b.c-a.c);
+  let cmpCard=cmp.length?`<div class="card"><div class="card-t"><span class="dot"></span>预算执行对比</div>${cmp.map(r=>{const pct=r.b>0?Math.min(100,r.c/r.b*100):0;const over=r.b>0&&r.c>r.b;return `<div class="brow"><div class="ic">${CAT_IC[r.c]||'💡'}</div><div class="info"><div class="t">${r.c}</div><div class="s">${r.b>0?('已花 '+fmt0(r.c)+' / 预算 '+fmt0(r.b)):'已花 '+fmt0(r.c)}</div><div class="bar"><i class="${over?'over':''}" style="width:${pct}%"></i></div></div><div class="amt ${over?'over':''}">${fmt0(r.c)}</div></div>`;}).join('')}</div>`:'';
+  // 月度趋势
+  const months=[...new Set(tx.map(t=>t.date.slice(0,7)))].sort();
+  let trendCard='';
+  if(months.length>1){
+    const vals=months.map(m=>{const mt=tx.filter(t=>t.date.startsWith(m));return netOf(mt).net;});
+    trendCard=`<div class="card"><div class="card-t"><span class="dot"></span>月度净支出趋势</div><div id="sTrend"></div></div>`;
+  }
+  G('statsView').innerHTML=head+donutCard+stageCard+cmpCard+trendCard;
+  donut(G('sDonut'),items);
+  if(months.length>1){const vals=months.map(m=>netOf(tx.filter(t=>t.date.startsWith(m))).net);barSVG(G('sTrend'),months.map(m=>m.slice(5)+'月'),vals);}
+}
+
+/* ============ 渲染：我的-方案 ============ */
+function renderHouses(){
+  G('houseList').innerHTML=db.houses.map(h=>{
+    const {net}=netOf(txOf(h.id));const on=h.id===curHouse().id;
+    return `<div class="brow" style="cursor:pointer" data-house="${h.id}">
+      <div class="ic">🏠</div>
+      <div class="info"><div class="t">${h.name} ${on?'· 当前':''}</div>
+        <div class="s">${h.budget>0?('预算 '+fmt0(h.budget)+' · '):''}已花 ${fmt0(net)} · ${txOf(h.id).length} 笔</div></div>
+      <div class="ar" style="color:#c3cad4" data-edit="${h.id}">✎</div></div>`;
+  }).join('');
+  G('houseList').querySelectorAll('[data-house]').forEach(r=>r.onclick=e=>{
+    if(e.target.dataset.edit){editHouse(e.target.dataset.edit);return;}
+    switchHouse(r.dataset.house);toast('已切换到 '+curHouse().name);showScreen('record');
+  });
+  G('houseList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();editHouse(b.dataset.edit);});
+}
+function editHouse(id){
+  const h=db.houses.find(x=>x.id===id);if(!h)return;
+  const name=prompt('方案名称',h.name);if(name===null)return;
+  const budget=prompt('装修总预算（元，可留空）',h.budget||'');
+  h.name=name.trim()||h.name;h.budget=parseFloat(budget)||0;save();refreshHouses();renderAll();
+}
+
+/* ============ 屏幕切换 ============ */
+function renderAll(){refreshHouses();renderHero();renderCats();renderBudget();renderList();renderStats();renderHouses();renderVip();renderTrial();}
+function showScreen(name){
+  ui.screen=name;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  G('sc-'+name).classList.add('active');
+  document.querySelectorAll('.tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.screen===name));
+  if(name==='record'){renderHero();renderCats();}
+  if(name==='budget')renderBudget();
+  if(name==='list')renderList();
+  if(name==='stats')renderStats();
+  if(name==='mine'){renderHouses();renderVip();}
+}
+
+/* ============ 事件绑定 ============ */
+function bind(){
+  document.querySelectorAll('.tabbar button').forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
+  // 类型切换
+  document.querySelectorAll('#typeSeg button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#typeSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    ui.rtype=b.dataset.type;renderCats();
+  });
+  // 支付方式
+  G('fPay').value=ui.rpay;
+  G('fPay').onclick=()=>{const p=prompt('支付方式',ui.rpay);if(p&&p.trim()){ui.rpay=p.trim();G('fPay').value=ui.rpay;}};
+  // 照片
+  G('photoBtn').onclick=()=>G('photoInput').click();
+  G('photoInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+    r.onload=()=>{const img=new Image();img.onload=()=>{const maxW=900,sc=Math.min(1,maxW/img.width);
+      const w=Math.round(img.width*sc),hh=Math.round(img.height*sc),cv=document.createElement('canvas');
+      cv.width=w;cv.height=hh;cv.getContext('2d').drawImage(img,0,0,w,hh);
+      ui.rphoto=cv.toDataURL('image/jpeg',0.7);G('photoPrev').src=ui.rphoto;G('photoPrev').classList.remove('hidden');G('photoTxt').textContent='✅ 已附票据（点可重拍）';};
+      img.src=r.result;};r.readAsDataURL(f);e.target.value='';};
+  // 记一笔
+  G('fDate').value=dstr(new Date());
+  G('btnAdd').onclick=()=>{
+    const date=G('fDate').value,cat=ui.rcat,amt=parseFloat(G('fAmt').value),item=G('fItem').value.trim(),mer=G('fMer').value.trim(),note=G('fNote').value.trim();
+    if(!date){toast('请选日期');return;}
+    if(!amt||amt<=0){toast('金额要大于 0');return;}
+    if(!isUnlocked()&&db.tx.length>=TRIAL_CAP){toast('试用版最多记 '+TRIAL_CAP+' 笔，激活后不限');openAct();return;}
+    db.tx.push({id:uid(),hid:curHouse().id,date,stage:CAT_ST[cat],cat,item,merchant:mer,amount:amt,type:ui.rtype,pay:ui.rpay,note,photo:ui.rphoto});
+    save();G('fAmt').value='';G('fItem').value='';G('fMer').value='';G('fNote').value='';
+    ui.rphoto=null;G('photoPrev').classList.add('hidden');G('photoTxt').textContent='📷 拍张发票 / 合同留底';
+    renderHero();
+    if(G('keepAdd').checked){try{G('fAmt').focus()}catch(_){}toast('已记：'+cat+' '+fmt(amt));}
+    else{toast('已记：'+cat+' '+fmt(amt));showScreen('list');}
+  };
+  G('keepAdd').onchange=()=>{if(G('keepAdd').checked){try{G('fAmt').focus()}catch(_){}}};
+  // 房屋选择
+  document.querySelectorAll('.houseSel').forEach(s=>s.onchange=()=>switchHouse(s.value));
+  ['addHouse1','addHouse2','addHouse3','addHouse4'].forEach(id=>G(id).onclick=newHouse);
+  G('btnNewHouse').onclick=newHouse;
+  function newHouse(){const name=prompt('新方案名称','如：爸妈家翻新');if(name===null)return;const budget=prompt('装修总预算（元，可留空）','');const h={id:uid(),name:name.trim()||'新方案',budget:parseFloat(budget)||0,catBudgets:{}};db.houses.push(h);db.cur=h.id;save();refreshHouses();renderAll();toast('已新建 '+h.name);}
+  // 预算总预算输入
+  G('fBudget').onchange=()=>{curHouse().budget=parseFloat(G('fBudget').value)||0;save();renderBudget();renderHero();toast('已设总预算');};
+  G('btnSplit').onclick=()=>{const h=curHouse();if(!h.budget){toast('请先填总预算');return;}const sum=Object.values(WEIGHTS).reduce((a,b)=>a+b,0);h.catBudgets={};CATS.forEach(c=>{h.catBudgets[c.n]=Math.round(h.budget*WEIGHTS[c.n]/sum);});save();renderBudget();toast('已按经验比例分摊');};
+  // 明细筛选
+  G('fStage').onchange=()=>{ui.fstage=G('fStage').value;renderList();};
+  G('fCat').onchange=()=>{ui.fcat=G('fCat').value;renderList();};
+  const sIn=G('listSearch'),sClr=G('listClear');
+  const doSearch=()=>{ui.q=sIn.value;sClr.style.display=ui.q?'block':'none';renderList();};
+  sIn.oninput=doSearch;sClr.onclick=()=>{sIn.value='';ui.q='';sClr.style.display='none';renderList();};
+  // 导出 Excel
+  G('btnExport').onclick=exportCSV;G('mExport').onclick=exportCSV;
+  // 激活
+  G('mActivate').onclick=openAct;
+  G('actBtn').onclick=()=>{const v=G('actCode').value.trim();if(!v){toast('请输入激活码');return;}if(activate(v)){G('actCode').value='';closeAct();}};
+  G('actCode').oninput=()=>{G('actCode').value=G('actCode').value.toUpperCase();};
+  // 我的
+  G('mSample').onclick=()=>{if(txOf(curHouse().id).length&&!confirm('载入示例会追加到当前方案，确定？'))return;db.tx=db.tx.concat(sample(curHouse().id));save();renderAll();toast('已载入示例');showScreen('stats');};
+  G('mBackup').onclick=()=>{const b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='装修记账本_'+dstr(new Date())+'.json';a.click();toast('已备份 '+db.tx.length+' 条');};
+  G('mImport').onclick=()=>G('fileInput').click();
+  G('fileInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+    r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.houses)throw 0;
+      if(!confirm('导入将覆盖当前所有方案与数据，确定？'))return;db=d;if(!db.cur)db.cur=db.houses[0].id;save();renderAll();toast('已导入');
+    }catch(_){toast('文件格式不对');}};r.readAsText(f);e.target.value='';};
+  G('mClear').onclick=()=>{const h=curHouse();const n=txOf(h.id).length;if(!n){toast('本来就是空的');return}
+    if(confirm('确定清空「'+h.name+'」的全部记账？建议先备份！')){db.tx=db.tx.filter(t=>t.hid!==h.id);save();renderAll();toast('已清空');}};
+}
+
+/* ============ 导出 CSV ============ */
+function csvCell(v){v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function exportCSV(){
+  if(!isUnlocked()){toast('导出为完整版功能，激活后可用');openAct();return;}
+  const h=curHouse();const rows=[['装修方案','日期','星期','阶段','分类','项目','品牌商家','类型','金额','支付方式','备注']];
+  txOf(h.id).slice().sort((a,b)=>b.date.localeCompare(a.date)).forEach(t=>rows.push([h.name,t.date,WD[parseD(t.date).getDay()],t.stage,t.cat,t.item,t.merchant,t.type==='ref'?'退款':'支出',t.amount,t.pay,t.note]));
+  const csv='\ufeff'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n');
+  const b=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='装修记账_'+h.name+'_'+dstr(new Date())+'.csv';a.click();toast('已导出 Excel');
+}
+
+/* ============ 示例数据 ============ */
+function sample(hid){
+  const out=[],now=new Date(),y=now.getFullYear(),m=now.getMonth();
+  const mk=d=>dstr(new Date(y,m,d)),rnd=(a,b)=>Math.round(a+Math.random()*(b-a));
+  const add=(d,cat,item,mer,amt,pay)=>out.push({id:uid(),hid,date:mk(d),stage:CAT_ST[cat],cat,item,merchant:mer,amount:amt,type:'exp',pay:pay||'微信',note:'',photo:null});
+  add(2,'设计费','全屋设计+施工图','老侯设计工作室',8800,'银行卡');
+  add(5,'拆改人工','拆墙砌墙人工','装修队王师傅',4200,'微信');
+  add(5,'垃圾清运','建渣清运','物业指定',680,'微信');
+  add(9,'水电材料','伟星水管+熊猫电线','建材市场',5600,'支付宝');
+  add(12,'水电人工','水电路改造人工','水电工李哥',4800,'微信');
+  add(14,'防水工程','卫生间防水涂料','德高门店',1200,'微信');
+  add(18,'瓷砖地砖','客餐厅地砖800×800','马可波罗',9800,'信用卡');
+  add(20,'泥瓦人工','贴砖人工','泥瓦工',5200,'微信');
+  add(22,'地板','卧室实木复合地板','大自然',6400,'花呗');
+  add(26,'卫浴洁具','马桶+花洒+浴室柜','九牧',7200,'支付宝');
+  add(28,'橱柜','整体橱柜3.5米','欧派',8600,'银行卡');
+  add(30,'室内门','实木复合门3樘','TATA',4500,'微信');
+  add(2,'封窗窗户','断桥铝封阳台','本地门窗厂',7800,'微信');
+  add(4,'烟机灶具','集成灶','森歌',6500,'信用卡');
+  add(8,'木工人工','吊顶+背景墙人工','木工',3600,'微信');
+  add(10,'定制柜体','衣柜+玄关柜','志邦',9200,'花呗');
+  add(14,'油漆涂料','乳胶漆+腻子','多乐士',3200,'微信');
+  add(16,'油漆人工','墙面涂刷人工','油漆工',3000,'微信');
+  add(20,'灯具照明','全屋灯具','欧普',2600,'支付宝');
+  add(22,'窗帘布艺','窗帘轨道','如鱼得水',1800,'微信');
+  add(24,'家具','沙发+餐桌+床','顾家',12800,'花呗');
+  add(26,'床垫寝具','乳胶床垫','喜临门',3200,'微信');
+  add(28,'智能家居','智能开关+门锁+窗帘电机','老侯智能',5800,'微信');
+  add(3,'空调','中央空调一拖四','格力',14500,'银行卡');
+  add(6,'冰箱','对开门冰箱','海尔',4200,'花呗');
+  add(9,'洗衣机','滚筒洗衣机','小天鹅',2600,'支付宝');
+  add(11,'电视','75寸电视','小米',4800,'微信');
+  add(13,'热水器','燃气热水器','林内',2200,'微信');
+  add(16,'监理管理费','第三方监理','监理公司',1500,'微信');
+  add(28,'开荒保洁','全屋开荒','保洁阿姨',800,'微信');
+  add(29,'其他杂项','五金件+美缝','五金店',1600,'微信');
+  add(15,'瓷砖地砖','地砖补货退差价','马可波罗',-300,'信用卡'); // 退款示例
+  return out;
+}
+
+/* ============ 启动 ============ */
+renderAll();bind();
+if(location.protocol.indexOf('http')===0&&navigator.serviceWorker){navigator.serviceWorker.register('sw.js').catch(function(){});}
+const lu=G('liveUrl');if(lu)lu.textContent=(location.protocol.indexOf('http')===0)?location.href:'请部署到云端后获取在线地址';
+</script>
+</body>
+</html>
