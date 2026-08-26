@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>装修记账本 · 激活码领取</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"PingFang SC",sans-serif;background:linear-gradient(160deg,#16293f,#0e1b2b);color:#eaf1f8;min-height:100vh;padding:24px 16px;display:flex;flex-direction:column;align-items:center}
+  .card{width:100%;max-width:420px;background:#1d3450;border:1px solid #2c4a6e;border-radius:16px;padding:22px 18px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  h1{font-size:20px;margin:0 0 4px;color:#f58634;text-align:center}
+  .sub{font-size:13px;color:#9fb3c8;text-align:center;margin-bottom:18px}
+  .price{font-size:34px;font-weight:800;text-align:center;color:#fff;margin:6px 0}
+  .price small{font-size:14px;color:#9fb3c8;font-weight:400}
+  .btn{display:block;width:100%;padding:15px;margin:16px 0 6px;border:0;border-radius:12px;background:#f58634;color:#16293f;font-size:17px;font-weight:700;cursor:pointer}
+  .btn:active{transform:scale(.98)}
+  .hint{font-size:12px;color:#8aa0b8;text-align:center;margin-bottom:10px}
+  .result{margin-top:14px;padding:16px;border:1px dashed #f58634;border-radius:12px;background:#16293f;text-align:center;display:none}
+  .result .lab{font-size:12px;color:#9fb3c8}
+  .code{font-size:22px;font-weight:800;letter-spacing:1px;color:#f58634;margin:8px 0;word-break:break-all}
+  .copy{font-size:13px;color:#7fd1a6;cursor:pointer}
+  .count{font-size:12px;color:#8aa0b8;text-align:center;margin-top:14px}
+  details{margin-top:18px;font-size:12px;color:#7c91a8}
+  details summary{cursor:pointer;color:#9fb3c8}
+  details p{line-height:1.6}
+  code{background:#0e1b2b;padding:2px 5px;border-radius:4px;color:#f58634}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>装修记账本 · 激活码</h1>
+    <div class="sub">永久买断版解锁码</div>
+    <div class="price">¥9.9 <small>一次付费 · 永久使用</small></div>
+    <button class="btn" id="claim">我已付款，领取激活码</button>
+    <div class="hint">付款后点上方按钮，系统自动发放，无需人工</div>
+    <div class="result" id="result">
+      <div class="lab">您的激活码（长按复制 / 在记账本「我的」里输入）</div>
+      <div class="code" id="code"></div>
+      <span class="copy" id="copy">点击复制</span>
+    </div>
+    <div class="count" id="count"></div>
+    <details>
+      <summary>侯哥管理说明（客户请忽略）</summary>
+      <p>本页码池已内置 <b>100</b> 个有效激活码，客户点击即随机分配一个并写入本机缓存防重复领取。<br>
+      码池用尽后：运行 <code>装修记账本\售卖\激活码批量生成.py</code> 重新生成一批，把下方 <code>POOL</code> 数组替换为新码即可（需重新部署到 GitHub）。<br>
+      ⚠️ 码池写在页面 JS 中属公开可见，请勿把整批码发到公开群；发现被刷可更换码段。</p>
+    </details>
+  </div>
+<script>
+  const POOL=[
+  "ZJ-WFAV-C6T9-G412",
+  "ZJ-56AN-HMCK-428B",
+  "ZJ-TZZQ-SDD3-5FYB",
+  "ZJ-4EXM-ZRXR-A964",
+  "ZJ-NBXE-Q9V4-M0VX",
+  "ZJ-626Z-2909-QXP8",
+  "ZJ-N250-MXJ8-QK24",
+  "ZJ-REFT-C1KZ-WJY8",
+  "ZJ-CBM5-5ANM-1MQ2",
+  "ZJ-J7WZ-NCQD-HCJ6",
+  "ZJ-Y735-1D82-3DHN",
+  "ZJ-J3H6-X1GY-AW8R",
+  "ZJ-738Z-ABW1-4XAN",
+  "ZJ-G9TV-P7QH-XKD8",
+  "ZJ-98T0-SR4Y-YZ6X",
+  "ZJ-7SXZ-KAV8-JRJG",
+  "ZJ-D7N4-J83R-5GZA",
+  "ZJ-YQQ6-S75S-8201",
+  "ZJ-6QQH-P7QA-E0XN",
+  "ZJ-S69G-9KEH-62ZJ",
+  "ZJ-7BYY-4H8C-W8ZW",
+  "ZJ-7X55-F20G-MVEJ",
+  "ZJ-DWKC-SDZM-0N4Z",
+  "ZJ-51Z2-TDMR-JW4Z",
+  "ZJ-SKKB-H5AR-H9RX",
+  "ZJ-TBZX-TSBZ-PA7F",
+  "ZJ-74S2-SZGF-WP24",
+  "ZJ-3BH6-3ZRB-FQPC",
+  "ZJ-P2EB-Q45G-SH36",
+  "ZJ-RK2T-G0RD-K632",
+  "ZJ-9MPE-8FAD-R4B4",
+  "ZJ-PJYR-6T72-C4DR",
+  "ZJ-E6S3-PG0T-CBDE",
+  "ZJ-EMX1-2199-K7B4",
+  "ZJ-6024-F7HE-97YY",
+  "ZJ-W787-TT7H-PA1T",
+  "ZJ-E657-NF0X-8BMD",
+  "ZJ-8B17-ZMV5-1TD8",
+  "ZJ-MP2W-4R03-D2W3",
+  "ZJ-V7AB-TMC1-P27D",
+  "ZJ-6RR3-HNK5-SDC7",
+  "ZJ-P4J1-5ZW8-HQMZ",
+  "ZJ-YSJS-7R5F-5PJQ",
+  "ZJ-VN8T-0X3V-J2CQ",
+  "ZJ-3MC7-X032-7PJ5",
+  "ZJ-SKMY-THTZ-Y2Q4",
+  "ZJ-7DZD-MWG7-C999",
+  "ZJ-RZ0B-J97W-SD8Q",
+  "ZJ-ER05-YNDX-6MYD",
+  "ZJ-M33X-8CQG-AVZ8",
+  "ZJ-Q9MW-4FGP-N011",
+  "ZJ-DMPB-G2TF-62N4",
+  "ZJ-5385-5FFA-BVEV",
+  "ZJ-JEQD-1D3S-7CT1",
+  "ZJ-HKJH-R25C-DM65",
+  "ZJ-JBTG-5WPF-3XJ9",
+  "ZJ-39J9-M56K-DQEP",
+  "ZJ-ASFB-ERNJ-ND6N",
+  "ZJ-700N-WRV4-C2P0",
+  "ZJ-9S3C-255D-DXJW",
+  "ZJ-37RP-VH9Y-85TT",
+  "ZJ-XBKE-ZJKA-DHXC",
+  "ZJ-82R3-BFAR-BVGR",
+  "ZJ-7ZHV-RSX0-GQP2",
+  "ZJ-7E8V-1357-JQ38",
+  "ZJ-WN1W-9GVP-YK29",
+  "ZJ-9PF1-RX2D-65F6",
+  "ZJ-48Z9-7MVE-GT9A",
+  "ZJ-C5FB-28CG-6N6A",
+  "ZJ-2ECN-01JW-70AA",
+  "ZJ-BFW8-H70P-TRGG",
+  "ZJ-XAA7-GJ3W-MWGE",
+  "ZJ-8Q9B-KX6W-XGXP",
+  "ZJ-HJ03-JCR8-B61W",
+  "ZJ-820R-Y5EC-T5A4",
+  "ZJ-8W98-1Q7Q-8JAG",
+  "ZJ-CYXS-M7Y6-X500",
+  "ZJ-AWWY-JPFC-3MGV",
+  "ZJ-GFBT-ED5X-D2Q5",
+  "ZJ-B53E-KAD0-96TZ",
+  "ZJ-JQKA-QQ4M-QXVT",
+  "ZJ-VX1P-EC4T-JPTX",
+  "ZJ-S888-WFH6-WTAY",
+  "ZJ-1BDW-DC52-SH6P",
+  "ZJ-T9PN-95R8-367B",
+  "ZJ-B6Y8-HP1N-BYF8",
+  "ZJ-0KFN-QPJN-EYFA",
+  "ZJ-Z2EF-4S72-MVHX",
+  "ZJ-PDZ9-WJPG-S9N7",
+  "ZJ-7D26-7H51-GAJ0",
+  "ZJ-DYS6-YSTC-0B8H",
+  "ZJ-XTFD-GPNA-PWDA",
+  "ZJ-1636-3HAS-DREQ",
+  "ZJ-T4Y5-2JY5-H84P",
+  "ZJ-7Z9W-JNKR-BM7P",
+  "ZJ-WCMH-8MBK-V3G9",
+  "ZJ-6YB8-H205-P74C",
+  "ZJ-E04M-MXVJ-1KYH",
+  "ZJ-DBD4-TTFV-58DM",
+  "ZJ-1880-DKA0-XZQF"
+  ];
+  const KEY="ledger_claimed_codes";
+  function claimed(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return []}}
+  function showCount(){
+    const n=claimed().length;
+    document.getElementById("count").textContent="本设备已领取："+n+" 个";
+  }
+  function claim(){
+    const used=claimed();
+    const avail=POOL.filter(c=>!used.includes(c));
+    if(avail.length===0){alert("激活码已发放完毕，请联系「侯哥」补发");return;}
+    const code=avail[Math.floor(Math.random()*avail.length)];
+    used.push(code);
+    localStorage.setItem(KEY,JSON.stringify(used));
+    const r=document.getElementById("result");
+    r.style.display="block";
+    document.getElementById("code").textContent=code;
+    showCount();
+    document.getElementById("claim").textContent="再领一个（如多设备）";
+  }
+  document.getElementById("claim").addEventListener("click",claim);
+  document.getElementById("copy").addEventListener("click",()=>{
+    const t=document.getElementById("code").textContent;
+    navigator.clipboard&&navigator.clipboard.writeText(t);
+    document.getElementById("copy").textContent="已复制 ✓";
+    setTimeout(()=>document.getElementById("copy").textContent="点击复制",1500);
+  });
+  showCount();
+</script>
+</body>
+</html>
