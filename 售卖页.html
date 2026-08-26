@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>装修记账本 · 装修专属记账 · 购买</title>
+<style>
+  :root{
+    --navy:#1f3a5f; --navy-d:#16293f; --orange:#f5872a; --orange-l:#ff8a3d;
+    --bg:#f4f6f9; --card:#fff; --ink:#222b36; --muted:#7a8696; --line:#e7ecf2;
+    --shadow:0 8px 24px rgba(22,41,63,.10);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;padding-bottom:34px}
+  .top{background:linear-gradient(135deg,var(--navy),var(--navy-d));color:#fff;padding:22px 20px 26px;text-align:center}
+  .top .logo{width:62px;height:62px;border-radius:16px;background:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:30px;box-shadow:var(--shadow);margin-bottom:10px}
+  .top h1{margin:0;font-size:21px;font-weight:800;letter-spacing:1px}
+  .top p{margin:6px 0 0;font-size:13px;color:#c7d4e4}
+  .top .hook{font-size:16px;font-weight:800;color:var(--orange-l);margin:10px 0 8px;line-height:1.45;padding:0 6px;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+  .badge{display:inline-block;margin-top:12px;background:rgba(245,135,42,.18);color:var(--orange-l);
+    border:1px solid rgba(245,135,42,.5);font-size:12px;padding:4px 12px;border-radius:20px}
+  .sec{padding:18px 16px 0}
+  .sec h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:7px;color:var(--navy)}
+  .sec h2 .bar{width:4px;height:16px;background:var(--orange);border-radius:3px}
+  .feat{background:var(--card);border-radius:16px;padding:6px 14px;box-shadow:var(--shadow)}
+  .feat li{list-style:none;display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .feat li:last-child{border-bottom:0}
+  .feat .ic{font-size:20px;flex:0 0 auto;margin-top:1px}
+  .feat b{color:var(--navy)}
+  .price{background:linear-gradient(135deg,var(--navy),var(--navy-d));color:#fff;border-radius:18px;
+    padding:20px;text-align:center;box-shadow:var(--shadow);margin:18px 16px 0}
+  .price .num{font-size:34px;font-weight:800;color:var(--orange-l)}
+  .price .num small{font-size:16px;font-weight:600}
+  .price .t{font-size:13px;color:#c7d4e4;margin-top:2px}
+  .price .rights{margin-top:12px;font-size:12.5px;color:#e9eef5;text-align:left;display:inline-block}
+  .price .rights div{margin:3px 0}
+  .steps{background:var(--card);border-radius:16px;padding:14px;box-shadow:var(--shadow);counter-reset:s}
+  .steps .st{display:flex;gap:11px;align-items:flex-start;padding:9px 0;font-size:13.5px}
+  .steps .st .n{counter-increment:s;flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px}
+  .steps .st .n::before{content:counter(s)}
+  .steps .st b{color:var(--navy)}
+  .pay{display:flex;gap:12px;margin-top:14px}
+  .pay .pc{flex:1;background:var(--card);border-radius:16px;padding:14px 10px;box-shadow:var(--shadow);text-align:center}
+  .pay .pc img{width:140px;height:140px;border-radius:12px;border:1px solid var(--line)}
+  .pay .pc .nm{margin-top:9px;font-size:13px;font-weight:700;color:var(--navy)}
+  .pay .pc .tip{font-size:11px;color:var(--muted);margin-top:2px}
+  .inst{background:var(--card);border-radius:16px;padding:16px;text-align:center;box-shadow:var(--shadow);margin-top:14px}
+  .inst img{width:170px;height:170px;border-radius:12px}
+  .inst .cap{font-size:13px;color:var(--navy);font-weight:700;margin-top:10px}
+  .inst .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .priv{background:#fff7f0;border:1px solid #ffe2cc;border-radius:14px;padding:13px 14px;font-size:12.5px;color:#8a5a2b;margin-top:14px}
+  .priv b{color:var(--orange)}
+  .foot{text-align:center;font-size:11.5px;color:var(--muted);margin-top:20px;padding:0 16px}
+  .edit{text-align:center;font-size:11px;color:#aab4c0;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="logo">🏠</div>
+    <div class="hook">装修超预算？一本账，让每一分钱都花得明明白白</div>
+    <h1>装修记账本 · 装修专属记账</h1>
+    <p>一本装进手机的账，装修花了多少、花在哪，一眼看清</p>
+    <div class="badge">苹果 · 鸿蒙 · 安卓 通用 · 离线也能用</div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="bar"></span>它能帮你做什么</h2>
+    <ul class="feat">
+      <li><span class="ic">🏗️</span><div><b>装修专属分类</b>：34 个装修分类，按拆改 / 水电 / 泥瓦 / 木工 / 油漆 / 主材 / 软装 / 家电等 10 个阶段归档，不是通用记账。</div></li>
+      <li><span class="ic">💡</span><div><b>预算总控 + 超支预警</b>：设总预算，一键智能分摊到各分类；某类花超了自动标红提醒，钱花哪了一清二楚。</div></li>
+      <li><span class="ic">📊</span><div><b>统计图表</b>：分类占比环形图、各阶段花费、预算执行对比、月度趋势，装修完一拉全知道。</div></li>
+      <li><span class="ic">📷</span><div><b>票据照片</b>：每笔可拍小票 / 合同留底，以后查账有凭有据。</div></li>
+      <li><span class="ic">🔒</span><div><b>数据在你手机</b>：不联网、不上传任何服务器，账本只存在你自己的设备里。</div></li>
+    </ul>
+  </div>
+
+  <div class="price">
+    <div class="num">¥9.9<small> 元</small></div>
+    <div class="t">终身买断 · 一次付费 · 永久使用 · 免费更新</div>
+    <div class="rights">
+      <div>✓ 永久使用全部功能，无订阅、无广告</div>
+      <div>✓ 后续版本免费更新</div>
+      <div>✓ 数据本地存储，安全放心</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="bar"></span>购买步骤</h2>
+    <div class="steps">
+      <div class="st"><span class="n"></span><div>扫上方<b>安装码</b>，免费装到手机试用（可记 10 笔）</div></div>
+      <div class="st"><span class="n"></span><div>体验满意，扫下方<b>微信 / 支付宝收款码</b>付 ¥9.9</div></div>
+      <div class="st"><span class="n"></span><div>截图<b>付款凭证</b>，微信发给「侯哥」</div></div>
+      <div class="st"><span class="n"></span><div>侯哥收到款后，发你<b>激活码</b>解锁完整版，永久使用</div></div>
+    </div>
+    <div class="priv" style="margin-top:12px">
+      <b>说明：</b>本页已公开<b>安装码</b>，可免费扫码装到手机试用（免费版可记 10 笔）。想解锁完整版，扫下方收款码付 ¥9.9，把付款截图发给「侯哥」，我发你<b>激活码</b>即刻解锁。
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="bar"></span>扫码安装 · 免费试用</h2>
+    <div class="inst">
+      <img src="install-qr.png" alt="安装二维码">
+      <div class="cap">长按 / 扫一扫，装到手机桌面</div>
+      <div class="sub">免费版可记 10 笔 · 想解锁完整版再付款激活</div>
+    </div>
+    <div class="priv" style="margin-top:12px">
+      <b>怎么用：</b>用手机扫上方二维码 → 点「添加到主屏幕」即装到桌面 → 打开就能记。免费版可记 10 笔，记满后想继续使用，扫下方收款码付 ¥9.9，付款后点下方按钮<b>系统自动发激活码</b>，不用联系侯哥、不用等。
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="bar"></span>扫码付款</h2>
+    <div class="pay">
+      <div class="pc">
+        <img src="wechat-qr.png" alt="微信收款码">
+        <div class="nm">微信支付</div>
+        <div class="tip">长按识别二维码</div>
+      </div>
+      <div class="pc">
+        <img src="alipay-qr.png" alt="支付宝收款码">
+        <div class="nm">支付宝</div>
+        <div class="tip">长按识别二维码</div>
+      </div>
+    </div>
+    <div class="priv" style="margin-top:14px;text-align:center">
+      <p style="margin:0 0 8px">付 ¥9.9 后，点下方按钮，<b>系统自动发放激活码</b>，不用联系侯哥、不用等。</p>
+      <a href="https://houyanliang888.github.io/budget-book-miniprogram/claim.html" style="display:inline-block;max-width:280px;padding:13px 22px;border-radius:10px;background:#f58634;color:#16293f;font-weight:700;text-decoration:none">💡 我已付款，领取激活码</a>
+      <div style="margin-top:16px;background:#fff;border-radius:14px;padding:14px;display:inline-block;box-shadow:0 4px 14px rgba(0,0,0,.08)">
+        <img src="claim-qr.png" alt="领激活码" style="width:220px;height:220px;display:block;border-radius:0">
+      </div>
+      <p style="color:#9fb3c8;font-size:12px;margin:10px 0 0">↑ 长按二维码识别，进入领码页</p>
+      <p style="color:#9fb3c8;font-size:11px;margin:4px 0 0">若识别失败，可点上方橙色按钮直接打开</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="bar"></span>联系侯哥（咨询 / 售后）</h2>
+    <div class="priv" style="border-color:#c7ecd8;background:#eefaf3;color:#1c6b4a;display:flex;align-items:center;gap:14px">
+      <img src="wechat-contact.jpg" alt="侯哥微信" style="width:104px;height:104px;border-radius:12px;border:1.5px solid #c7ecd8;flex-shrink:0;object-fit:cover" />
+      <div style="flex:1;font-size:13px;line-height:1.9">
+        <div><b>微信号：</b><span style="color:#07c160;font-weight:700">ZNGHS_HYL</span></div>
+        <div><b>小红书：</b>侯哥智改</div>
+        <div style="font-size:12px;color:#5a7a68;margin-top:4px">微信扫一扫添加，使用问题、解锁疑问随时找我</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="priv">
+      <b>隐私说明：</b>装修记账本为纯本地记账工具，所有记账数据仅保存在你自己的手机浏览器中，开发者无法读取、也不会上传到任何服务器。付款仅用于获取使用授权，不涉及你的任何财务数据。
+    </div>
+  </div>
+
+  <div class="foot">装修记账本 · 全屋智能设计师 侯哥 出品<br>装修别糊涂，账本记清楚</div>
+  <div class="edit">※ 本页文字 / 价格 / 收款码可改；安装码已公开可免费试用，付 ¥9.9 后由客户在领码页自助领取激活码，无需侯哥手动发送</div>
+</div>
+</body>
+</html>
