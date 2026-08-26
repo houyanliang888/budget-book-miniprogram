@@ -191,7 +191,7 @@
       <div class="mini" id="appMini">离线可用</div>
     </div>
     <div class="trialbar hidden" id="trialBar" onclick="openAct()">
-      🧪 试用版 · 已记 <span class="cnt">0/30</span> 笔 · <b>9.9元激活</b> 解锁无限记录 + 导出 ›
+      🧪 试用版 · 已记 <span class="cnt">0/10</span> 笔 · <b>9.9元激活</b> 解锁无限记录 + 导出 ›
     </div>
 
   <!-- 记账 -->
@@ -430,7 +430,7 @@ function checkSize(){try{if(JSON.stringify(db).length>4000000&&!checkSize._w){ch
 
 /* ============ 激活码 / 付费解锁 ============ */
 const LIC_KEY='zhuangjia_ledger_lic_v1';
-const TRIAL_CAP=30;
+const TRIAL_CAP=10;
 const SALT='HOUGE-ZJ-LEDGER-9D9-2026';          // ⚠️ 必须与「激活码生成器.html」里的 SALT 完全一致
 const LIC_URL='';                               // 可选：填激活校验接口(返回 {"ok":true} 即放行)；留空=纯本地校验
 const ALPH='0123456789ABCDEFGHJKMNPQRSTVWXYZ';  // Crockford base32（无易混字符 I/L/O/U）
@@ -539,7 +539,7 @@ function renderBudget(){
   G('budgetOverview').innerHTML=ov;
   // 分类预算
   const spent={};tx.forEach(t=>{if(t.type==='exp')spent[t.cat]=(spent[t.cat]||0)+ +t.amount;});
-  const rows=CATS.map(c=>{const s=spent[c.n]||0,b=h.catBudgets[c.n]||0;return{c:s,sp:s,b:b};})
+  const rows=CATS.map(c=>{const s=spent[c.n]||0,b=h.catBudgets[c.n]||0;return{c:c.n,sp:s,b:b};})
     .sort((a,b)=>b.sp-a.sp);
   let html='';
   rows.forEach(r=>{
