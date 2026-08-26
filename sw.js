@@ -1,4 +1,4 @@
-const CACHE='zhuangji-zhangben-v1';
+const CACHE='zhuangji-zhangben-v2';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-512.png','./icon-192.png','./icon-180.png','./icon.svg'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()));
