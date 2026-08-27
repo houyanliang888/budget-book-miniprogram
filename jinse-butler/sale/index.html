@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>锦瑟管家 · 购买与激活</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"PingFang SC",sans-serif;background:#eef1f5;color:#16293f}
+  .wrap{max-width:520px;margin:0 auto;padding:0 14px 60px}
+  .hero{background:linear-gradient(160deg,#1f3a5f,#16293f);color:#fff;padding:30px 20px 26px;text-align:center;border-radius:0 0 22px 22px}
+  .logo{width:64px;height:64px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:30px}
+  .hero h1{margin:0;font-size:24px}
+  .hero p{margin:6px 0 0;color:#b9c8dc;font-size:13px}
+  .badge{display:inline-block;margin-top:12px;padding:5px 14px;border:1px solid #f5a623;border-radius:20px;color:#f5a623;font-size:12px}
+  .price{background:#fff;border-radius:16px;padding:18px;margin:-18px 14px 0;position:relative;box-shadow:0 6px 20px rgba(0,0,0,.08);text-align:center}
+  .price .num{font-size:40px;font-weight:800;color:#f5a623}
+  .price .num small{font-size:16px;color:#9fb3c8;font-weight:400}
+  .price .desc{font-size:12px;color:#7c93ab;margin-top:4px}
+  .sec{background:#fff;border-radius:16px;padding:16px;margin:14px 0;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+  .sec h2{font-size:16px;margin:0 0 12px;color:#1f3a5f;display:flex;align-items:center;gap:8px}
+  .sec h2 .dot{width:8px;height:8px;border-radius:50%;background:#f5a623}
+  ol.steps{margin:0;padding-left:0;list-style:none;counter-reset:s}
+  ol.steps li{counter-increment:s;position:relative;padding:10px 0 10px 38px;border-bottom:1px solid #eef1f5;font-size:14px;line-height:1.5}
+  ol.steps li:last-child{border-bottom:0}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:26px;height:26px;border-radius:50%;background:#f5a623;color:#16293f;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .qr-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .qr-item{text-align:center;flex:1;min-width:130px}
+  .qr-item img{width:130px;height:130px;border-radius:12px;background:#fff;border:1px solid #e3e8ef;padding:6px}
+  .qr-item .cap{font-size:13px;margin-top:6px;color:#16293f;font-weight:600}
+  .qr-item .tip{font-size:11px;color:#9fb3c8}
+  .btn{display:block;width:100%;padding:15px;margin:14px 0 6px;border:0;border-radius:12px;background:#f5a623;color:#16293f;font-size:17px;font-weight:700;cursor:pointer}
+  .btn:active{transform:scale(.98)}
+  .hint{font-size:12px;color:#8aa0bb;text-align:center;margin-bottom:8px}
+  .result{margin-top:12px;padding:14px;border:1px dashed #f5a623;border-radius:12px;background:#fff7ec;text-align:center;display:none}
+  .result .lab{font-size:12px;color:#9a6b1f}
+  .code{font-size:21px;font-weight:800;letter-spacing:1px;color:#d97a00;margin:8px 0;word-break:break-all}
+  .copy{font-size:13px;color:#2a7fb0;cursor:pointer}
+  .count{font-size:12px;color:#8aa0bb;text-align:center;margin-top:10px}
+  .install ol{margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#3a4a5e}
+  .priv{font-size:12px;color:#7c93ab;line-height:1.7;background:#f5f7fa;border-radius:10px;padding:12px}
+  .foot{text-align:center;font-size:12px;color:#9fb3c8;margin-top:18px}
+</style>
+</head>
+<body>
+  <div class="hero">
+    <div class="logo">📒</div>
+    <h1>锦瑟管家</h1>
+    <p>装修人的智能记账本 · 日周月年一目了然</p>
+    <span class="badge">苹果 · 鸿蒙 · 安卓 通用 · 离线也能用</span>
+  </div>
+  <div class="wrap">
+    <div class="price">
+      <div class="num">¥9.9<small> 终身买断</small></div>
+      <div class="desc">一次付费 · 永久使用 · 免费更新 · 数据本地存储</div>
+    </div>
+
+    <div class="sec">
+      <h2><span class="dot"></span>购买步骤</h2>
+      <ol class="steps">
+        <li>扫下方「安装码」，免费装到手机试用（可记 10 笔）</li>
+        <li>体验满意，扫「微信 / 支付宝收款码」付 ¥9.9</li>
+        <li>付款后点下方「领取激活码」，自助拿到激活码</li>
+        <li>在 App「我的」里输入激活码，永久解锁完整版</li>
+      </ol>
+    </div>
+
+    <div class="sec">
+      <h2><span class="dot"></span>扫码操作</h2>
+      <div class="qr-grid">
+        <div class="qr-item"><img src="install-qr.png" alt="安装码"><div class="cap">安装码</div><div class="tip">扫码装到手机</div></div>
+        <div class="qr-item"><img src="wechat-qr.png" alt="微信收款"><div class="cap">微信收款码</div><div class="tip">付 ¥9.9</div></div>
+        <div class="qr-item"><img src="alipay-qr.png" alt="支付宝收款"><div class="cap">支付宝收款码</div><div class="tip">付 ¥9.9</div></div>
+      </div>
+      <div class="qr-grid" style="margin-top:12px">
+        <div class="qr-item"><img src="claim-qr.png" alt="领激活码"><div class="cap">领激活码</div><div class="tip">扫码在浏览器领</div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2><span class="dot"></span>领取激活码</h2>
+      <div class="hint">付款后点按钮，系统自动发放，无需等人工</div>
+      <button class="btn" id="claim">我已付款，领取激活码</button>
+      <div class="result" id="result">
+        <div class="lab">您的激活码（复制后在 App「我的」里输入）</div>
+        <div class="code" id="code"></div>
+        <span class="copy" id="copy">点击复制</span>
+      </div>
+      <div class="count" id="count"></div>
+    </div>
+
+    <div class="sec install">
+      <h2><span class="dot"></span>安装到手机</h2>
+      <ol>
+        <li><b>iPhone</b>：用 Safari 打开安装码 → 点底部「分享」→「添加到主屏幕」</li>
+        <li><b>鸿蒙 / 安卓</b>：用浏览器打开安装码 → 点右上角 ⋮ →「添加到桌面 / 安装应用」</li>
+        <li>装好后桌面出现图标，点开即用，离线也能记账</li>
+      </ol>
+    </div>
+
+    <div class="sec">
+      <h2><span class="dot"></span>隐私说明</h2>
+      <div class="priv">锦瑟管家为纯本地记账工具，数据仅存在你自己的手机里，不会上传任何服务器。激活码仅用于解锁完整功能，本页面激活码为公开发放，请勿转售。</div>
+    </div>
+
+    <div class="foot">锦瑟管家 · 全屋智能设计师 侯哥 出品</div>
+  </div>
+<script>
+const POOL=["JSZ-ACH4-9BMH-C54S","JSZ-GS3X-MUGC-F75R","JSZ-4ABC-5WJQ-WHS5","JSZ-CQY5-4ADJ-G7UF","JSZ-U93J-UNFX-LWTD","JSZ-YXCP-JGAR-K5JN","JSZ-C7F2-5DB6-RAPF","JSZ-QZB2-DTZ9-6WKC","JSZ-CKAX-5F3N-68J3","JSZ-LB4Y-9FPC-WBHJ","JSZ-UKVM-TDNY-8TY9","JSZ-KH7N-9ZT5-YZMA","JSZ-4UDA-RMRR-TU2W","JSZ-L8EC-QDHS-7CHP","JSZ-5YMF-VYFD-22SX","JSZ-Q6R2-76LK-3FYR","JSZ-45N9-TYJ6-SM6F","JSZ-EH59-9R5H-QEBV","JSZ-UV9C-SB34-4ZH5","JSZ-559L-V5NS-JUTN","JSZ-RR2Z-DFP7-9WTJ","JSZ-NQVH-EJRK-VF2V","JSZ-ZAVU-GRTY-KB9K","JSZ-DS3F-YQF8-UJ6Q","JSZ-9LNG-BAHL-QETQ","JSZ-HFNV-7RJZ-78MR","JSZ-RRD7-47LD-ZG6Z","JSZ-3TEK-YG8M-4FKA","JSZ-SKNX-CRA2-CT8N","JSZ-WZ7E-UKBQ-YX56","JSZ-BT6Z-E49B-BED7","JSZ-X8GW-267X-MS6D","JSZ-EFF3-R46J-YZAR","JSZ-ULT8-DR46-A8PU","JSZ-AAYC-ZJ2R-CF88","JSZ-8X4G-MDZC-XJ4B","JSZ-EAHP-99XY-GS3C","JSZ-LBCD-W4VK-LQSK","JSZ-HRSW-MXT7-FCX6","JSZ-METB-5SCW-6J5U","JSZ-CT5L-Z8EB-UF88","JSZ-DTQK-FJ85-U8ZX","JSZ-XVSW-87AH-ZD3X","JSZ-VNMS-795C-YFUD","JSZ-X8Q8-KF7Q-98X6","JSZ-VE39-DY2K-5PNV","JSZ-FJSE-VJ3X-36UM","JSZ-KQ29-4ER3-67KL","JSZ-SMZJ-XNTF-NKJC","JSZ-298S-2PZU-2BJ5","JSZ-QRUF-N9XF-TFVU","JSZ-JAFL-QM4M-ZUM6","JSZ-YSB9-CN29-SX9D","JSZ-AALE-HE8E-XZQP","JSZ-YLSZ-4362-9HNA","JSZ-LXB4-3PB8-54U8","JSZ-YMGR-S39T-EASA","JSZ-L34Z-25KP-RNVH","JSZ-8KC4-KQJB-293C","JSZ-X799-EN9P-45UJ","JSZ-6XA6-6FB4-TEWZ","JSZ-AGN3-6NCG-2P4M","JSZ-WHMY-RUEV-982F","JSZ-EJ5T-Z3G9-YRY3","JSZ-E2QN-A9HN-89KG","JSZ-SKMQ-PFK3-XTDZ","JSZ-VLX5-3PMF-ETXG","JSZ-HD5K-FCNU-VCRR","JSZ-V5EY-RRQ8-UM82","JSZ-7BG8-FBWM-6PBS","JSZ-MR4N-X5U8-RX8F","JSZ-3C89-UWSU-TP9Y","JSZ-ZC4V-X7RF-2D5Y","JSZ-8UDL-F457-4SFF","JSZ-V8YT-XW3T-72EK","JSZ-3FNX-FPZE-NNWT","JSZ-RPB4-7JY2-3RCX","JSZ-T5T5-ADBS-3HAW","JSZ-7TZR-XPAD-V4MZ","JSZ-WGPZ-YM6Z-TWZA","JSZ-QHDD-C28E-TKJ7","JSZ-VXM6-GQ28-Z9MV","JSZ-9PNM-DV4M-CH7N","JSZ-NK5C-LVDL-Q4BL","JSZ-ZDFP-TVEY-F5MG","JSZ-625J-YH9S-E37T","JSZ-QLVX-CXB7-4LUQ","JSZ-WSWG-VAQU-6ALH","JSZ-2TVB-DGS9-VDST","JSZ-F77H-4HTX-FLLB","JSZ-XPXE-9GRK-UKRA","JSZ-WURB-LSWQ-U5W4","JSZ-TYFX-QLVC-X4NA","JSZ-7S8V-WVLD-T9KH","JSZ-WCFY-4NJY-2GUU","JSZ-FKKJ-E9P6-7SK2","JSZ-THRN-23NR-ZH2D","JSZ-X968-BTDS-6MDP","JSZ-553B-2ECE-PC8B","JSZ-NBF6-GS4N-3UJP","JSZ-P9JS-4M2A-FQZA","JSZ-368A-MYYV-Q3N9","JSZ-PQ5X-DGXG-36KA","JSZ-Q6SL-43V4-DAA2","JSZ-6WE9-KLTP-PMQT","JSZ-YVAU-3DRB-SQ5C","JSZ-EDWB-TPQW-C4FB","JSZ-8MJ4-H9NJ-FPTJ","JSZ-9KAR-5SL5-WA6T","JSZ-W7X7-PLND-FN7L","JSZ-FYY2-3NPS-HJXG","JSZ-T3NV-CLR6-WXKA","JSZ-ERP2-N3TK-DCEV","JSZ-W2ZK-7RFT-DJNF","JSZ-QPLL-KVH7-J3SE","JSZ-SJGG-X2JL-Q4TV","JSZ-CCBC-B9LZ-H9LR","JSZ-5ZY2-NW88-PA5A","JSZ-FE8F-72AM-L4P5","JSZ-VNFN-FHPX-FUKA","JSZ-BQPH-3QNK-BFXN","JSZ-ATWH-FSTQ-8M28","JSZ-KR82-3LRC-4RH9","JSZ-DDZG-GUGD-H9ND","JSZ-TMYL-KZFY-TUTA","JSZ-5EF5-X9L6-32ST","JSZ-TN8B-3TJS-AMD6","JSZ-9QTG-LP54-TEDC","JSZ-9W73-2A3P-5L6H","JSZ-LD65-SG2Z-925A","JSZ-8E9E-DN4E-4ERU","JSZ-M85B-TGX8-PRYQ","JSZ-4YWQ-NVZM-3MJJ","JSZ-LLVE-K59L-65ZT","JSZ-3RPS-BHBY-UEPM","JSZ-CBDR-ZV6T-43RU","JSZ-4KL4-SX77-3QBP","JSZ-8X3P-MXG6-ZCLP","JSZ-J853-DUJK-SM92","JSZ-FY8U-ZXPK-5GM3","JSZ-DW2W-4RM7-MWXG","JSZ-XAA2-72KS-WH2G","JSZ-DNJ5-FGJE-9EFN","JSZ-U3MG-XQW6-ZFK5","JSZ-56GF-3AUR-25SZ","JSZ-FMAJ-9PSC-2LWJ","JSZ-V39P-D2QY-TKC2","JSZ-3JZ5-WK4Q-DFTZ","JSZ-BHHR-5F3B-W485","JSZ-HLLZ-5P9A-HWTT","JSZ-K4QD-WEAP-FWY7","JSZ-5ZLJ-WMC3-4FJ4","JSZ-PKYU-HTEG-BY85","JSZ-9FT8-92GV-FGXU","JSZ-K76K-G7H9-553L","JSZ-DYGX-ZEKN-8KTE","JSZ-Q4VG-HLM2-GSD2","JSZ-2NXT-9ANF-7KX5","JSZ-38Q6-HZQT-2DR8","JSZ-RC6C-RSZF-5EWF","JSZ-VJKK-W8X3-H3FK","JSZ-9ZV3-EP48-ER56","JSZ-ZP6R-592U-B8ES","JSZ-9HJS-PX72-VFNV","JSZ-MVRF-XM6M-93MM","JSZ-H2DX-E9BT-68SW","JSZ-6YD2-F29E-Q7B6","JSZ-V6Z7-E6KA-KRT7","JSZ-TYNT-X6HW-3V6X","JSZ-KPNP-VDCH-NL34","JSZ-JGGK-9KDW-H5LF","JSZ-Q63Y-548Q-CTXM","JSZ-CWCT-E6A5-98HG","JSZ-L4Y9-MJ5X-VB8K","JSZ-4V25-VW7B-JEUZ","JSZ-QTU3-M826-MQNR","JSZ-4TLW-5M3J-CWJ4","JSZ-GVTM-UKRN-3RX7","JSZ-47TY-57T3-YVPX","JSZ-ZEL3-VKHN-6PMY","JSZ-65V7-ZBFA-Y7K9","JSZ-ACZH-DDDV-TXLZ","JSZ-2L54-X7CH-4JF2","JSZ-J3AP-PYA4-84MW","JSZ-E2EC-XS8P-35V4","JSZ-SZBZ-4K7B-PC8G","JSZ-TH9N-DJ5W-7KFJ","JSZ-H5XB-ZDWT-SNC5","JSZ-6TMG-EDVF-DCMH","JSZ-T9PA-CQUQ-YFTB","JSZ-D7JN-LRW5-UNDK","JSZ-3RF8-5VXJ-B8G2","JSZ-JD95-52ZW-V9F2","JSZ-84BW-SXM6-GC3K","JSZ-LU4B-2MPK-887L","JSZ-38GP-JTQX-ZMQR","JSZ-MSKX-5BSC-A29L","JSZ-ZHQK-5S9V-JKVH","JSZ-H93F-RWBA-NUSR","JSZ-FABR-ZZT9-XKK6"];
+
+const KEY="jinse_claimed_codes";
+function claimed(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return[]}}
+function showCount(){const el=document.getElementById("count");if(el)el.textContent="本设备已领取："+claimed().length+" 个";}
+function claim(){
+  const used=claimed();
+  const avail=POOL.filter(c=>!used.includes(c));
+  if(avail.length===0){alert("激活码已发放完毕，请联系「侯哥」补发");return;}
+  const code=avail[Math.floor(Math.random()*avail.length)];
+  used.push(code);localStorage.setItem(KEY,JSON.stringify(used));
+  const r=document.getElementById("result");if(r)r.style.display="block";
+  const cd=document.getElementById("code");if(cd)cd.textContent=code;
+  showCount();
+  const b=document.getElementById("claim");if(b)b.textContent="再领一个（多设备用）";
+}
+document.addEventListener("DOMContentLoaded",function(){
+  const btn=document.getElementById("claim");if(btn)btn.addEventListener("click",claim);
+  const cp=document.getElementById("copy");if(cp)cp.addEventListener("click",function(){
+    const t=document.getElementById("code").textContent;
+    if(navigator.clipboard)navigator.clipboard.writeText(t);
+    cp.textContent="已复制 ✓";setTimeout(function(){cp.textContent="点击复制";},1500);
+  });
+  showCount();
+});
+
+</script>
+</body>
+</html>

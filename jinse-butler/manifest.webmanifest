@@ -1,0 +1,16 @@
+{
+  "name": "锦瑟管家",
+  "short_name": "锦瑟管家",
+  "description": "个人记账、周期流水统计、工资/保险/公积金/还贷固定收支拆解",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1f3a5f",
+  "theme_color": "#1f3a5f",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
