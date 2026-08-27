@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>锦瑟管家 · 交付物料总览</title>
+<style>
+  :root{
+    --navy:#1a2a4a; --navy2:#24395f; --orange:#f5a623; --grey:#6b7280; --line:#e5e7eb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6fa;color:#1f2937;line-height:1.6;padding:24px;}
+  .wrap{max-width:900px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(26,42,74,.08);}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:28px 32px;}
+  header h1{font-size:24px;letter-spacing:1px;display:flex;align-items:center;gap:10px;}
+  header h1 .logo{width:34px;height:34px;border-radius:50%;background:var(--orange);display:inline-flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 12px rgba(245,166,35,.6);}
+  header p{opacity:.85;margin-top:6px;font-size:14px;}
+  .sec{padding:24px 32px;border-bottom:1px solid var(--line);}
+  .sec:last-child{border-bottom:none;}
+  .sec h2{font-size:17px;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .sec h2::before{content:"";width:6px;height:18px;background:var(--orange);border-radius:3px;}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .card{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fafbfc;}
+  .card .tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:20px;background:#eef2ff;color:#3b5bdb;margin-bottom:10px;}
+  .card .tag.orange{background:#fff3df;color:#c77800;}
+  .card img{border:1px solid var(--line);border-radius:10px;width:100%;max-width:220px;display:block;margin:0 auto 12px;background:#fff;}
+  .card .link{font-size:13px;word-break:break-all;color:#2563eb;background:#f1f5f9;padding:8px 10px;border-radius:8px;margin-top:6px;}
+  .card .use{font-size:13px;color:var(--grey);margin-top:8px;}
+  .list{list-style:none;}
+  .list li{padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px;display:flex;gap:10px;}
+  .list li:last-child{border-bottom:none;}
+  .list .k{color:var(--navy);font-weight:600;min-width:120px;}
+  .list .v{color:#374151;flex:1;}
+  .list .v code{background:#f1f5f9;padding:2px 6px;border-radius:5px;font-size:13px;word-break:break-all;}
+  .note{background:#fff8ec;border-left:4px solid var(--orange);padding:14px 16px;border-radius:8px;font-size:13px;color:#7a5a16;margin-top:12px;}
+  .qrgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:10px;}
+  .qrbox{text-align:center;}
+  .qrbox img{width:200px;height:200px;border:1px solid var(--line);border-radius:12px;background:#fff;}
+  .qrbox .cap{font-size:13px;margin-top:8px;color:var(--navy);font-weight:600;}
+  .qrbox .sub{font-size:12px;color:var(--grey);margin-top:2px;}
+  footer{padding:18px 32px;background:#fafbfc;font-size:12px;color:var(--grey);text-align:center;}
+  .btn{display:inline-block;margin-top:14px;background:var(--orange);color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600;}
+  @media(max-width:640px){.cards,.qrgrid{grid-template-columns:1fr;}}
+  @media print{body{background:#fff;padding:0;}.wrap{box-shadow:none;border-radius:0;}.sec{page-break-inside:avoid;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="logo">💰</span>锦瑟管家 · 交付物料总览</h1>
+    <p>全屋智能设计师「侯哥」出品 · 本地记账 App + ¥9.9 售卖闭环 · 更新于 2026-08-23</p>
+  </header>
+
+  <div class="sec">
+    <h2>两张核心二维码（扫码用途不同，勿混）</h2>
+    <div class="qrgrid">
+      <div class="qrbox">
+        <img src="jinse-sale-qr.png" alt="购买页二维码">
+        <div class="cap">🟠 购买页二维码</div>
+        <div class="sub">扫了进付款页 · 公域引流/海报印这个</div>
+      </div>
+      <div class="qrbox">
+        <img src="install-qr.png" alt="安装码二维码">
+        <div class="cap">🔵 安装码二维码</div>
+        <div class="sub">扫了直接装 App · 收款后私发客户</div>
+      </div>
+    </div>
+    <div class="note">
+      ⚠️ 区别速记：<b>购买码</b>让客户去付款，<b>安装码</b>让已付款客户装 App。付款前绝不发安装码。
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>有效链接汇总</h2>
+    <ul class="list">
+      <li><span class="k">购买页（最新）</span><span class="v"><code>https://87aaead839384936a10ddadfb3c66843.app.workbuddy.link</code><br>客户付款入口，含微信/支付宝收款码</span></li>
+      <li><span class="k">App 安装（私发）</span><span class="v"><code>https://27f9b1a3073e49c18e8c2b27bb5db580.app.workbuddy.link</code><br>付款后发给客户，扫码即装成手机 App</span></li>
+    </ul>
+  </div>
+
+  <div class="sec">
+    <h2>本地物料文件清单</h2>
+    <div class="cards">
+      <div class="card">
+        <span class="tag orange">售卖页</span>
+        <div class="use"><b>jinse-sale/index.html</b><br>购买页本体（私发安装码版）</div>
+      </div>
+      <div class="card">
+        <span class="tag">收款码</span>
+        <div class="use"><b>jinse-sale/wechat-qr.png</b> · <b>alipay-qr.png</b><br>你的真实微信/支付宝收款码</div>
+      </div>
+      <div class="card">
+        <span class="tag orange">购买码</span>
+        <div class="use"><b>jinse-sale-qr.png</b> · <b>jinse-sale/jinse-sale-qr.png</b><br>指向新购买页的二维码</div>
+      </div>
+      <div class="card">
+        <span class="tag">安装码</span>
+        <div class="use"><b>install-qr.png</b> · <b>jinse-sale/install-qr.png</b><br>指向 App 安装链接的二维码</div>
+      </div>
+      <div class="card">
+        <span class="tag">私发卡</span>
+        <div class="use"><b>安装码私发卡.html</b><br>收款后转发客户的卡片（藏蓝+橙）</div>
+      </div>
+      <div class="card">
+        <span class="tag">App 本体</span>
+        <div class="use"><b>侯哥记账本.html</b> · <b>jinse-app/</b><br>锦瑟管家主程序（PWA）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>交付闭环流程</h2>
+    <ul class="list">
+      <li><span class="k">① 引流</span><span class="v">公域（抖音/小红书/海报）放<b>购买页二维码</b>，引导进购买页</span></li>
+      <li><span class="k">② 付款</span><span class="v">客户扫码 → 微信/支付宝付 ¥9.9 → 截图发你</span></li>
+      <li><span class="k">③ 私发</span><span class="v">你转发<b>安装码私发卡.html</b>（或单独发 <b>install-qr.png</b>）给客户</span></li>
+      <li><span class="k">④ 安装</span><span class="v">客户扫码 → 按手机系统"添加到主屏幕"即装成 App</span></li>
+    </ul>
+    <div class="note">
+      提示：CloudStudio 沙箱链接若失效，重新部署即可获得新链接；或直接将 <b>jinse-sale/index.html</b> 发给客户用浏览器打开也能付款。
+    </div>
+  </div>
+
+  <footer>
+    本页为侯哥本地交付物料总览 · 可 Ctrl+P 存为 PDF 备用 · 所有链接与二维码以本页记录为准
+  </footer>
+</div>
+</body>
+</html>
